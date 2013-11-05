@@ -21,6 +21,8 @@ module Jira
         end
         "#{username}:#{password}"
       end
+
+      self.discard_memoized
     end
 
   end

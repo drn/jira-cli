@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'thor', '~> 0.18.1'
   s.add_dependency 'highline', '~> 1.6.20'
+  s.add_dependency 'faraday', '~> 0.8.8'
 end
