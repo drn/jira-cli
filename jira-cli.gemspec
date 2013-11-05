@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Darren Lin Cheng']
   s.email       = 'darren@thanx.com'
-  s.homepage    = 'http://rubygems.org/gems/jira-cli'
+  s.homepage    = 'https://github.com/darrenli/jira-cli'
   s.summary     = 'JIRA CLI'
   s.description = 'CLI used to manage JIRA workflows leveraging git'
   s.license     = 'MIT'
