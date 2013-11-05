@@ -7,9 +7,6 @@ module Jira
 
     desc "install", "Guides the user through JIRA installation"
     def install
-      say self.jira_url_path
-      say self.jira_auth_path
-
       create_file self.jira_url_path, nil, verbose:false do
         self.cli.ask("Enter your JIRA URL: ")
       end

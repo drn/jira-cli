@@ -4,7 +4,7 @@ module Jira
     desc "summarize", "Outputs the summary of the input ticket"
     def summarize(ticket=nil)
       ticket ||= ex('git rev-parse --abbrev-ref HEAD')
-      json = self.query("issue/#{ticket}")
+      json = self.api_get("issue/#{ticket}")
       summary = json['fields']['summary']
       status = json['fields']['status']['name']
       self.mutex.synchronize do
@@ -32,6 +32,18 @@ module Jira
       threads.each{ |thread| thread.join }
     end
 
+    desc "comment", "Add a comment to the input ticket"
+    def comment(ticket=nil)
+      say "Coming soon"
+      #ticket ||= ex('get rev-parse --abbrev-ref HEAD')
+      #json = self.api_post("issue/#{ticket}")
+    end
+
+    desc "transition", "Transitions the input ticket to the next state"
+    def transition(ticket=nil)
+      say "Coming soon"
+    end
+
     protected
 
       def colored_ticket(ticket)
@@ -57,9 +69,18 @@ module Jira
         "#{Thor::Shell::Color::CLEAR}"
       end
 
-      def query(path)
-        response = self.client.get "#{self.jira_url}/rest/api/2/#{path}"
+      def api_get(path)
+        response = self.client.get self.api_path(path)
         return JSON.parse(response.body)
+      end
+
+      def api_post(path, params)
+        response = self.client.post self.api_path(path), params
+        return JSON.parse(response)
+      end
+
+      def api_path(path)
+        "#{self.jira_url}/rest/api/2/#{path}"
       end
 
       def mutex

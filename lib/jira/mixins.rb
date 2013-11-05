@@ -80,7 +80,9 @@ module Jira
         end
       end
 
-      def discard_memozied
+      def discard_memoized
+        @username = nil
+        @password = nil
         @jira_url = nil
       end
 
