@@ -6,8 +6,11 @@ module Jira
       ticket ||= ex('git rev-parse --abbrev-ref HEAD')
       json = self.query("issue/#{ticket}")
       summary = json['fields']['summary']
+      status = json['fields']['status']['name']
       self.mutex.synchronize do
-        say self.colored_ticket(ticket) + " " + self.colored_summary(summary)
+        say "#{self.colored_ticket(ticket)} "\
+            "#{self.colored_status(status).center(26)} "\
+            "#{self.colored_summary(summary)}"
       end
     end
 
@@ -37,6 +40,14 @@ module Jira
         "#{ticket}"\
         "#{Thor::Shell::Color::CLEAR}"\
         ")"
+      end
+
+      def colored_status(status)
+        "["\
+        "#{Thor::Shell::Color::BLUE}"\
+        "#{status}"\
+        "#{Thor::Shell::Color::CLEAR}"\
+        "]"
       end
 
       def colored_summary(summary)
