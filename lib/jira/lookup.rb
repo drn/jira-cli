@@ -6,7 +6,27 @@ module Jira
       ticket ||= ex('git rev-parse --abbrev-ref HEAD')
       json = self.query("issue/#{ticket}")
       summary = json['fields']['summary']
-      say self.colored_ticket(ticket) + " " + self.colored_summary(summary)
+      self.mutex.synchronize do
+        say self.colored_ticket(ticket) + " " + self.colored_summary(summary)
+      end
+    end
+
+    desc "all", "Summarizes all tickets that have local branches"
+    def all
+      tickets = []
+      branches = ex("git branch").delete("*").split("\n")
+      branches.each do |branch|
+        stripped = branch.strip
+        if !!stripped[/^[a-zA-Z]+-[0-9]+$/]
+          tickets << stripped
+        end
+      end
+
+      threads = []
+      tickets.each do |ticket|
+        threads << Thread.new{ self.summarize(ticket) }
+      end
+      threads.each{ |thread| thread.join }
     end
 
     protected
@@ -31,12 +51,18 @@ module Jira
         return JSON.parse(response.body)
       end
 
+      def mutex
+        @mutex ||= Mutex.new
+      end
+
       def client
-        return @client if !@client.nil?
-        @client = Faraday.new
-        username, password = self.jira_auth
-        @client.basic_auth(username, password)
-        return @client
+        self.mutex.synchronize do
+          return @client if !@client.nil?
+          @client = Faraday.new
+          username, password = self.jira_auth
+          @client.basic_auth(username, password)
+          return @client
+        end
       end
 
   end
