@@ -1,5 +1,10 @@
 module Jira
+  class CLI < Thor
 
-  VERSION = "0.0.0"
+    desc "version", "Displays the version"
+    def version
+      say "jira #{Jira::VERSION}"
+    end
 
+  end
 end
