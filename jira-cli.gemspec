@@ -18,4 +18,5 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_dependency 'thor', '~> 0.18.1'
+  s.add_dependency 'highline', '~> 1.6.20'
 end
