@@ -3,7 +3,7 @@ module Jira
 
     desc "summarize", "Outputs the summary of the input ticket"
     def summarize(ticket=nil)
-      ticket ||= ex('git rev-parse --abbrev-ref HEAD')
+      ticket ||= `git rev-parse --abbrev-ref HEAD`.strip
       output_summary(ticket)
     end
 
@@ -11,7 +11,7 @@ module Jira
     def all
       tickets = []
       current_ticket = nil
-      branches = ex("git branch").split("\n")
+      branches = `git branch`.strip.split("\n")
       branches.each do |branch|
         stripped = branch.delete('*').strip
         if !!stripped[/^[a-zA-Z]+-[0-9]+$/]
@@ -94,7 +94,7 @@ module Jira
       end
 
       def api_path(path)
-        "#{self.jira_url}/rest/api/2/#{path}"
+        "#{Jira::Core.url}/rest/api/2/#{path}"
       end
 
       def mutex
@@ -105,8 +105,7 @@ module Jira
         self.mutex.synchronize do
           return @client if !@client.nil?
           @client = Faraday.new
-          username, password = self.jira_auth
-          @client.basic_auth(username, password)
+          @client.basic_auth(Jira::Core.username, Jira::Core.password)
           return @client
         end
       end
