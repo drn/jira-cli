@@ -3,8 +3,8 @@ module Jira
 
     desc "describe", "Describes the input ticket"
     def describe(ticket=nil)
-      ticket ||= `git rev-parse --abbrev-ref HEAD`.strip
-      output_summary(ticket)
+      ticket || `git rev-parse --abbrev-ref HEAD`
+      description(ticket.strip)
     end
 
     desc "all", "Describes all local branches that match JIRA ticketing syntax"
