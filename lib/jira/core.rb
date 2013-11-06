@@ -66,7 +66,7 @@ module Jira
       #
       def root_path
         return @root_path if !@root_path.nil?
-        if !system('git rev-parse')
+        if !system('git rev-parse 2> /dev/null')
           puts "JIRA commands can only be run within a git repository."
           abort
         end
