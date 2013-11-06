@@ -5,7 +5,6 @@ module Jira
     require 'json'
     require 'faraday'
     include Thor::Actions
-    include Thor::Shell
 
     protected
 

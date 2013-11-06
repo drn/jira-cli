@@ -45,40 +45,14 @@ module Jira
 
     protected
 
-      def output_summary(ticket, decoration=false)
+      def output_summary(ticket, decorate=false)
         json = @api.get("issue/#{ticket}")
         summary = json['fields']['summary']
         status = json['fields']['status']['name']
-        say "#{self.colored_ticket(ticket, decoration)} "\
-            "#{self.colored_status(status).center(26)} "\
-            "#{self.colored_summary(summary)}"
-      end
-
-      def colored_ticket(ticket, decoration=false)
-        "#{Thor::Shell::Color::RED}"\
-        "#{ticket}"\
-        "#{self.colored_decoration if decoration}"\
-        "#{Thor::Shell::Color::CLEAR}"
-      end
-
-      def colored_decoration
-        "#{Thor::Shell::Color::BOLD}"\
-        "#{Thor::Shell::Color::YELLOW}*"
-      end
-
-      def colored_status(status)
-        "["\
-        "#{Thor::Shell::Color::BLUE}"\
-        "#{status}"\
-        "#{Thor::Shell::Color::CLEAR}"\
-        "]"
-      end
-
-      def colored_summary(summary)
-        "#{Thor::Shell::Color::BOLD}"\
-        "#{Thor::Shell::Color::WHITE}"\
-        "#{summary}"\
-        "#{Thor::Shell::Color::CLEAR}"
+        say Jira::Format.ticket(ticket) +
+            (decorate ? Jira::Format.star : " ") +
+            Jira::Format.status(status) +
+            Jira::Format.summary(summary)
       end
 
   end
