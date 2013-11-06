@@ -33,6 +33,18 @@ module Jira
         @password ||= self.auth.last
       end
 
+      #
+      # Determines whether or not the input ticket matches the expected JIRA
+      # ticketing syntax.
+      #
+      # @param ticket [String] input ticket name
+      #
+      # @return [Boolean] whether input string matches JIRA ticket syntax
+      #
+      def ticket?(ticket)
+        !!ticket[/^[a-zA-Z]+-[0-9]+$/]
+      end
+
       ### Relevant Paths
 
       #
