@@ -46,14 +46,12 @@ module Jira
     protected
 
       def output_summary(ticket, decoration=false)
-        json = self.api_get("issue/#{ticket}")
+        json = @api.get("issue/#{ticket}")
         summary = json['fields']['summary']
         status = json['fields']['status']['name']
-        self.mutex.synchronize do
-          say "#{self.colored_ticket(ticket, decoration)} "\
-              "#{self.colored_status(status).center(26)} "\
-              "#{self.colored_summary(summary)}"
-        end
+        say "#{self.colored_ticket(ticket, decoration)} "\
+            "#{self.colored_status(status).center(26)} "\
+            "#{self.colored_summary(summary)}"
       end
 
       def colored_ticket(ticket, decoration=false)
@@ -81,33 +79,6 @@ module Jira
         "#{Thor::Shell::Color::WHITE}"\
         "#{summary}"\
         "#{Thor::Shell::Color::CLEAR}"
-      end
-
-      def api_get(path)
-        response = self.client.get self.api_path(path)
-        return JSON.parse(response.body)
-      end
-
-      def api_post(path, params)
-        response = self.client.post self.api_path(path), params
-        return JSON.parse(response)
-      end
-
-      def api_path(path)
-        "#{Jira::Core.url}/rest/api/2/#{path}"
-      end
-
-      def mutex
-        @mutex ||= Mutex.new
-      end
-
-      def client
-        self.mutex.synchronize do
-          return @client if !@client.nil?
-          @client = Faraday.new
-          @client.basic_auth(Jira::Core.username, Jira::Core.password)
-          return @client
-        end
       end
 
   end

@@ -2,6 +2,7 @@ require 'thor'
 require 'fileutils'
 require 'jira/constants'
 require 'jira/core'
+require 'jira/api'
 require 'jira/mixins'
 require 'jira/version'
 require 'jira/install'
@@ -13,6 +14,7 @@ module Jira
     def initialize(args=[], options={}, config={})
       super
       Jira::Core.setup
+      @api = Jira::API.new
     end
 
   end
