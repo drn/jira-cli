@@ -4,30 +4,29 @@ module Jira
     desc "summarize", "Outputs the summary of the input ticket"
     def summarize(ticket=nil)
       ticket ||= ex('git rev-parse --abbrev-ref HEAD')
-      json = self.api_get("issue/#{ticket}")
-      summary = json['fields']['summary']
-      status = json['fields']['status']['name']
-      self.mutex.synchronize do
-        say "#{self.colored_ticket(ticket)} "\
-            "#{self.colored_status(status).center(26)} "\
-            "#{self.colored_summary(summary)}"
-      end
+      output_summary(ticket)
     end
 
     desc "all", "Summarizes all tickets that have local branches"
     def all
       tickets = []
-      branches = ex("git branch").delete("*").split("\n")
+      current_ticket = nil
+      branches = ex("git branch").split("\n")
       branches.each do |branch|
-        stripped = branch.strip
+        stripped = branch.delete('*').strip
         if !!stripped[/^[a-zA-Z]+-[0-9]+$/]
           tickets << stripped
+          if branch.include?('*')
+            current_ticket = stripped
+          end
         end
       end
 
       threads = []
-      tickets.each do |ticket|
-        threads << Thread.new{ self.summarize(ticket) }
+      tickets.each_with_index do |ticket, index|
+        threads << Thread.new do
+          output_summary(ticket, current_ticket==ticket)
+        end
       end
       threads.each{ |thread| thread.join }
     end
@@ -46,12 +45,27 @@ module Jira
 
     protected
 
-      def colored_ticket(ticket)
-        "("\
+      def output_summary(ticket, decoration=false)
+        json = self.api_get("issue/#{ticket}")
+        summary = json['fields']['summary']
+        status = json['fields']['status']['name']
+        self.mutex.synchronize do
+          say "#{self.colored_ticket(ticket, decoration)} "\
+              "#{self.colored_status(status).center(26)} "\
+              "#{self.colored_summary(summary)}"
+        end
+      end
+
+      def colored_ticket(ticket, decoration=false)
         "#{Thor::Shell::Color::RED}"\
         "#{ticket}"\
-        "#{Thor::Shell::Color::CLEAR}"\
-        ")"
+        "#{self.colored_decoration if decoration}"\
+        "#{Thor::Shell::Color::CLEAR}"
+      end
+
+      def colored_decoration
+        "#{Thor::Shell::Color::BOLD}"\
+        "#{Thor::Shell::Color::YELLOW}*"
       end
 
       def colored_status(status)
