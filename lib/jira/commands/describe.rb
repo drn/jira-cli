@@ -57,9 +57,11 @@ module Jira
         json = @api.get("issue/#{ticket}")
         summary = json['fields']['summary']
         status = json['fields']['status']['name']
+        assignee = json['fields']['assignee']['name']
         return Jira::Format.ticket(ticket) +
-               (star ? Jira::Format.star : " ") +
-               Jira::Format.status(status) +
+               (star ? Jira::Format.star : " ") + "  " +
+               ("(" + Jira::Format.user(assignee) + ")").ljust(20) +
+               Jira::Format.status(status).ljust(26) +
                Jira::Format.summary(summary)
       end
 

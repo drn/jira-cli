@@ -20,7 +20,7 @@ module Jira
         "#{Thor::Shell::Color::BLUE}"\
         "#{status}"\
         "#{Thor::Shell::Color::CLEAR}"\
-        "]".center(26)
+        "]"
       end
 
       def summary(summary)
@@ -30,9 +30,9 @@ module Jira
         "#{Thor::Shell::Color::CLEAR}"
       end
 
-      def author(author)
+      def user(user)
         "#{Thor::Shell::Color::MAGENTA}"\
-        "#{author}"\
+        "#{user}"\
         "#{Thor::Shell::Color::CLEAR}"
       end
 
@@ -65,7 +65,11 @@ module Jira
       def wrap(text)
         width = 80
         text.split("\n").collect do |line|
-          line.length > width ? line.gsub(/(.{1,#{width}})(\s+|$)/, "\\1\n").strip : line
+          if line.length > width
+            line.gsub(/(.{1,#{width}})(\s+|$)/, "\\1\n").strip
+          else
+            line
+          end
         end * "\n"
       end
 
