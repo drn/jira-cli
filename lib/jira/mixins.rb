@@ -17,3 +17,13 @@ module Jira
 
   end
 end
+
+class String
+
+  def from_json
+    JSON.parse(self)
+  rescue
+    {}
+  end
+
+end

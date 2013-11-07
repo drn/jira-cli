@@ -18,7 +18,7 @@ module Jira
     #
     def get(path, params={})
       response = @client.get(self.endpoint(path), params, self.headers)
-      JSON.parse(response.body)
+      return response.body.to_s.from_json
     end
 
     #
@@ -31,7 +31,7 @@ module Jira
     #
     def post(path, params={})
       response = @client.post(self.endpoint(path), params, self.headers)
-      JSON.parse(response.body)
+      return response.body.to_s.from_json
     end
 
     protected
