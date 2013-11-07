@@ -49,7 +49,7 @@ module Jira
       # @return [Boolean] whether input string matches JIRA ticket syntax
       #
       def ticket?(ticket)
-        !!ticket[/^[a-zA-Z]+-[0-9]+$/]
+        !!ticket.to_s[/^[a-zA-Z]+-[0-9]+$/]
       end
 
       ### Relevant Paths

@@ -3,7 +3,7 @@ module Jira
 
     desc "describe", "Describes the input ticket"
     def describe(ticket=Jira::Core.ticket)
-      puts description(ticket.strip)
+      puts description(ticket.strip, false, true)
     end
 
     desc "all", "Describes all local branches that match JIRA ticketing syntax"
@@ -30,12 +30,16 @@ module Jira
       # asynchronously fetch and describe tickets
       output = ""
       threads = []
-      threads << Thread.new{ puts description(tickets[:current], true) }
+      if Jira::Core.ticket?(tickets[:current])
+        threads << Thread.new{ puts description(tickets[:current], true) }
+      end
       mutex = Mutex.new
       tickets[:others].each do |ticket|
         threads << Thread.new do
           out = description(ticket) + "\n"
-          mutex.synchronize{ output << out }
+          if !out.strip.empty?
+            mutex.synchronize{ output << out }
+          end
         end
       end
       threads.each{ |thread| thread.join }
@@ -52,16 +56,22 @@ module Jira
       #
       # @return [String] formatted summary string
       #
-      def description(ticket, star=false)
+      def description(ticket, star=false, verbose=false)
         json = @api.get("issue/#{ticket}")
-        summary = json['fields']['summary']
-        status = json['fields']['status']['name']
-        assignee = json['fields']['assignee']['name']
-        return Jira::Format.ticket(ticket) +
-               (star ? Jira::Format.star : " ") + "  " +
-               ("(" + Jira::Format.user(assignee) + ")").ljust(20) +
-               Jira::Format.status(status).ljust(26) +
-               Jira::Format.summary(summary)
+        if json['errorMessages'].nil?
+          summary = json['fields']['summary']
+          status = json['fields']['status']['name']
+          assignee = json['fields']['assignee']['name']
+          return Jira::Format.ticket(ticket) +
+                (star ? Jira::Format.star : " ") + "  " +
+                ("(" + Jira::Format.user(assignee) + ")").ljust(20) +
+                Jira::Format.status(status).ljust(26) +
+                Jira::Format.summary(summary)
+        elsif verbose
+          return json['errorMessages'].join('. ')
+        else
+          return ""
+        end
       end
 
   end
