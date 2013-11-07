@@ -16,8 +16,8 @@ module Jira
     #
     # @return [JSON] parsed API response
     #
-    def get(path)
-      response = @client.get(self.endpoint(path))
+    def get(path, params={})
+      response = @client.get(self.endpoint(path), params, self.headers)
       JSON.parse(response.body)
     end
 
@@ -29,8 +29,8 @@ module Jira
     #
     # @return [JSON] parsed API response
     #
-    def post(path, params)
-      response = @client.post(self.endpoint(path), params)
+    def post(path, params={})
+      response = @client.post(self.endpoint(path), params, self.headers)
       JSON.parse(response.body)
     end
 
@@ -45,6 +45,15 @@ module Jira
       #
       def endpoint(path)
         "#{Jira::Core.url}/rest/api/2/#{path}"
+      end
+
+      #
+      # Returns the default API headers
+      #
+      # @return [Hash] API headers
+      #
+      def headers
+        { 'Content-Type' => 'application/json' }
       end
 
   end
