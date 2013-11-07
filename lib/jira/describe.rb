@@ -44,16 +44,6 @@ module Jira
       puts output
     end
 
-    desc "comment", "Add a comment to the input ticket"
-    def comment(ticket=nil)
-      say "Coming soon"
-    end
-
-    desc "transition", "Transitions the input ticket to the next state"
-    def transition(ticket=nil)
-      say "Coming soon"
-    end
-
     protected
 
       #
