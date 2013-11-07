@@ -12,6 +12,7 @@ require 'jira/install'
 require 'jira/describe'
 require 'jira/comment'
 require 'jira/browse'
+require 'jira/log'
 
 module Jira
   class CLI < Thor

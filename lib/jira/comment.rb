@@ -11,7 +11,7 @@ module Jira
         if json['errorMessages'].nil?
           puts "Successfully posted your comment."
         else
-          puts json['errorMessages'].first
+          puts json['errorMessages'].join('. ')
         end
       end
     end
@@ -20,7 +20,6 @@ module Jira
     def comments(ticket=Jira::Core.ticket)
       json = @api.get("issue/#{ticket}")
       if json['errorMessages'].nil?
-
         comments = json['fields']['comment']['comments']
         if comments.count > 0
           comments.each do |comment|
@@ -36,7 +35,7 @@ module Jira
           puts "There are no comments on issue #{ticket}."
         end
       else
-        puts json['errorMessages'].first
+        puts json['errorMessages'].join('. ')
       end
     end
 
