@@ -11,8 +11,9 @@ purposes.
 
 Installation
 ------------
-cd path/to/jira/repo
-jira install
+
+    cd path/to/jira/repo
+    jira install
 
 Note: Authentication files are expected to drastically change. Currently, they
 are completely unencrypted. Use are your own risk... (see disclaimer above)
