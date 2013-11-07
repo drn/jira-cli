@@ -39,8 +39,7 @@ module Jira
         end
       end
       threads.each{ |thread| thread.join }
-
-      puts output
+      puts output if !output.empty?
     end
 
     protected
