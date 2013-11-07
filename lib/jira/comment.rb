@@ -2,8 +2,7 @@ module Jira
   class CLI < Thor
 
     desc "comment", "Add a comment to the input ticket"
-    def comment(ticket=nil)
-      ticket ||= `git rev-parse --abbrev-ref HEAD`.strip
+    def comment(ticket=Jira::Core.ticket)
       comment = self.cli.ask("Leave a comment for ticket #{ticket}:")
       if comment.strip.empty?
         puts "No comment posted."
@@ -18,8 +17,7 @@ module Jira
     end
 
     desc "comments", "Lists the comments of the input ticket"
-    def comments(ticket=nil)
-      ticket ||= `git rev-parse --abbrev-ref HEAD`.strip
+    def comments(ticket=Jira::Core.ticket)
       json = @api.get("issue/#{ticket}")
       if json['errorMessages'].nil?
 

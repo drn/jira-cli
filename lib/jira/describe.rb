@@ -2,8 +2,7 @@ module Jira
   class CLI < Thor
 
     desc "describe", "Describes the input ticket"
-    def describe(ticket=nil)
-      ticket ||= `git rev-parse --abbrev-ref HEAD`
+    def describe(ticket=Jira::Core.ticket)
       puts description(ticket.strip)
     end
 

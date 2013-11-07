@@ -34,6 +34,13 @@ module Jira
       end
 
       #
+      # @return [String] default ticket is the current branch
+      #
+      def ticket
+        `git rev-parse --abbrev-ref HEAD`.strip
+      end
+
+      #
       # Determines whether or not the input ticket matches the expected JIRA
       # ticketing syntax.
       #
