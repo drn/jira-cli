@@ -6,14 +6,11 @@ require 'jira/core'
 require 'jira/api'
 require 'jira/format'
 require 'jira/mixins'
-# command logic
-require 'jira/version'
-require 'jira/install'
-require 'jira/describe'
-require 'jira/comment'
-require 'jira/browse'
-require 'jira/log'
-require 'jira/transition'
+# include jira/commands/*
+Dir.glob(
+  File.dirname(File.absolute_path(__FILE__)) + '/jira/commands/*',
+  &method(:require)
+)
 
 module Jira
   class CLI < Thor
