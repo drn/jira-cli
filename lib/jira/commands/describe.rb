@@ -30,7 +30,7 @@ module Jira
       # asynchronously fetch and describe tickets
       output = ""
       threads = []
-      if Jira::Core.ticket?(tickets[:current])
+      if !tickets[:current].nil?
         threads << Thread.new{ puts description(tickets[:current], true) }
       end
       mutex = Mutex.new
