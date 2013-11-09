@@ -7,7 +7,7 @@ module Jira
       summary = self.cli.ask("What should the new ticket summary be?")
       if !summary.strip.empty?
         params =  { fields: { summary: summary } }
-        @api.put("issue/#{ticket}", params) do |json|
+        self.api.put("issue/#{ticket}", params) do |json|
           puts "Successfully updated ticket #{ticket}'s summary."
         end
       else

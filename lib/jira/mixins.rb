@@ -15,6 +15,13 @@ module Jira
         @highline ||= ::HighLine.new
       end
 
+      #
+      # @return [Jira::API] Jira API class
+      #
+      def api
+        @api ||= Jira::API.new
+      end
+
   end
 end
 

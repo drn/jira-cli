@@ -7,7 +7,7 @@ module Jira
       if comment.strip.empty?
         puts "No comment posted."
       else
-        @api.post("issue/#{ticket}/comment", { body: comment }) do |json|
+        self.api.post("issue/#{ticket}/comment", { body: comment }) do |json|
           puts "Successfully posted your comment."
         end
       end
@@ -15,7 +15,7 @@ module Jira
 
     desc "comments", "Lists the comments of the input ticket"
     def comments(ticket=Jira::Core.ticket)
-      @api.get("issue/#{ticket}") do |json|
+      self.api.get("issue/#{ticket}") do |json|
         comments = json['fields']['comment']['comments']
         if comments.count > 0
           comments.each do |comment|

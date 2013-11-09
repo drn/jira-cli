@@ -3,7 +3,7 @@ module Jira
 
     desc "transition", "Transitions the input ticket to the next state"
     def transition(ticket=Jira::Core.ticket)
-      @api.get("issue/#{ticket}/transitions") do |json|
+      self.api.get("issue/#{ticket}/transitions") do |json|
         options = {}
         json['transitions'].each do |transition|
           options[transition['name']] = transition['id']
@@ -33,7 +33,7 @@ module Jira
 
       def api_transition(ticket, transition, description)
         params = { transition: { id: transition } }
-        @api.post("issue/#{ticket}/transitions", params) do |json|
+        self.api.post("issue/#{ticket}/transitions", params) do |json|
           puts "Successfully performed transition (#{description}) "\
                "on ticket #{ticket}."
         end

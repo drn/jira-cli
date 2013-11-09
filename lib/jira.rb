@@ -18,7 +18,7 @@ module Jira
     def initialize(args=[], options={}, config={})
       super
       Jira::Core.setup
-      @api = Jira::API.new
+      self.api
     end
 
   end
