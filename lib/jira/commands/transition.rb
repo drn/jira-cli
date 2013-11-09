@@ -4,6 +4,7 @@ module Jira
     desc "transition", "Transitions the input ticket to the next state"
     def transition(ticket=Jira::Core.ticket)
       json = @api.get("issue/#{ticket}/transitions")
+      return if !@api.errorless?(json)
 
       options = {}
       json['transitions'].each do |transition|
@@ -36,11 +37,9 @@ module Jira
           "issue/#{ticket}/transitions",
           { transition: { id: transition } }
         )
-        if json.empty?
+        if @api.errorless?(json)
           puts "Successfully performed transition (#{description}) "\
                "on ticket #{ticket}."
-        else
-          puts json['errorMessages'].join('. ')
         end
       end
 

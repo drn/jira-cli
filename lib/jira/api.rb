@@ -11,6 +11,23 @@ module Jira
       self.define_actions
     end
 
+    #
+    # If any, outputs all API errors described by the input JSON
+    #
+    # @param json [Hash] API response JSON
+    # @param verbose [Boolean] true if errors should be output
+    #
+    # @return [Boolean] true if no errors exist
+    #
+    def errorless?(json, verbose=true)
+      errors = json['errorMessages']
+      if !errors.nil?
+        puts errors.join('. ') if verbose
+        return false
+      end
+      return true
+    end
+
     protected
 
       #

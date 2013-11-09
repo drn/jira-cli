@@ -10,10 +10,8 @@ module Jira
           "issue/#{ticket}",
           { fields: { summary: summary } }
         )
-        if json['errorMessages'].nil?
+        if @api.errorless?(json)
           puts "Successfully updated ticket #{ticket}'s summary."
-        else
-          puts json['errorMessages'].join('. ')
         end
       else
         puts "No change made to ticket #{ticket}."

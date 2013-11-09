@@ -3,7 +3,8 @@ module Jira
 
     desc "describe", "Describes the input ticket"
     def describe(ticket=Jira::Core.ticket)
-      puts description(ticket.strip, false, true)
+      output = description(ticket.strip, false, true)
+      puts output if !output.strip.empty?
     end
 
     desc "all", "Describes all local branches that match JIRA ticketing syntax"
@@ -58,7 +59,7 @@ module Jira
       #
       def description(ticket, star=false, verbose=false)
         json = @api.get("issue/#{ticket}")
-        if json['errorMessages'].nil?
+        if @api.errorless?(json, verbose)
           summary = json['fields']['summary']
           status = json['fields']['status']['name']
           assignee = json['fields']['assignee']['name']
@@ -67,11 +68,8 @@ module Jira
                 ("(" + Jira::Format.user(assignee) + ")").ljust(20) +
                 Jira::Format.status(status).ljust(26) +
                 Jira::Format.summary(summary)
-        elsif verbose
-          return json['errorMessages'].join('. ')
-        else
-          return ""
         end
+        return ""
       end
 
   end

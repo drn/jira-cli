@@ -21,9 +21,7 @@ end
 class String
 
   def from_json
-    JSON.parse(self)
-  rescue
-    {}
+    JSON.parse(self) rescue {}
   end
 
 end
