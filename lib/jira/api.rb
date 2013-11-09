@@ -7,47 +7,39 @@ module Jira
     def initialize
       @client = Faraday.new
       @client.basic_auth(Jira::Core.username, Jira::Core.password)
-    end
 
-    #
-    # Issue an API GET request and return parsed JSON
-    #
-    # @param path [String] API path
-    #
-    # @return [JSON] parsed API response
-    #
-    def get(path, params={})
-      response = @client.get(self.endpoint(path), params, self.headers)
-      return response.body.to_s.from_json
-    end
-
-    #
-    # Issue an API POST request and return parsed JSON
-    #
-    # @param path [String] API path
-    # @param params [Hash] params to post
-    #
-    # @return [JSON] parsed API response
-    #
-    def post(path, params={})
-      response = @client.post(self.endpoint(path), params.to_json, self.headers)
-      return response.body.to_s.from_json
-    end
-
-    #
-    # Issue an API PUT request and return parsed JSON
-    #
-    # @param path [String] API path
-    # @parma params [Hash] params to put
-    #
-    # @return [JSON] parsed API response
-    #
-    def put(path, params={})
-      response = @client.put(self.endpoint(path), params.to_json, self.headers)
-      return response.body.to_s.from_json
+      self.define_actions
     end
 
     protected
+
+      #
+      # Defines the API GET, POST, PUT interaction methods
+      #
+      def define_actions
+        #
+        # def method(path, params={})
+        #
+        # Issue an API GET, POST, or PUT request and return parse JSON
+        #
+        # @param path [String] API path
+        # @param params [Hash] params to send
+        #
+        # @return [JSON] parased API response
+        #
+        [:get, :post, :put].each do |method|
+          self.class.send(:define_method, method) do |path, params=nil|
+            params = params.to_json if !params.nil?
+            response = @client.send(
+              method,
+              self.endpoint(path),
+              params,
+              self.headers
+            )
+            return response.body.to_s.from_json
+          end
+        end
+      end
 
       #
       # Returns the full JIRA REST API endpoint
