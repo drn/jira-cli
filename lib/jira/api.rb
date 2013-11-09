@@ -11,23 +11,6 @@ module Jira
       self.define_actions
     end
 
-    #
-    # If any, outputs all API errors described by the input JSON
-    #
-    # @param json [Hash] API response JSON
-    # @param verbose [Boolean] true if errors should be output
-    #
-    # @return [Boolean] true if no errors exist
-    #
-    def errorless?(json, verbose=true)
-      errors = json['errorMessages']
-      if !errors.nil?
-        puts errors.join('. ') if verbose
-        return false
-      end
-      return true
-    end
-
     protected
 
       #
@@ -42,10 +25,12 @@ module Jira
         # @param path [String] API path
         # @param params [Hash] params to send
         #
+        # @yield(Hash) yields to a success block
+        #
         # @return [JSON] parased API response
         #
         [:get, :post, :put].each do |method|
-          self.class.send(:define_method, method) do |path, params=nil|
+          self.class.send(:define_method, method) do |path, params=nil, verbose=true, &block|
             params = params.to_json if !params.nil?
             response = @client.send(
               method,
@@ -53,9 +38,29 @@ module Jira
               params,
               self.headers
             )
-            return response.body.to_s.from_json
+            json = response.body.to_s.from_json
+            if self.errorless?(json, verbose)
+              block.call(json)
+            end
           end
         end
+      end
+
+      #
+      # If any, outputs all API errors described by the input JSON
+      #
+      # @param json [Hash] API response JSON
+      # @param verbose [Boolean] true if errors should be output
+      #
+      # @return [Boolean] true if no errors exist
+      #
+      def errorless?(json, verbose=true)
+        errors = json['errorMessages']
+        if !errors.nil?
+          puts errors.join('. ') if verbose
+          return false
+        end
+        return true
       end
 
       #

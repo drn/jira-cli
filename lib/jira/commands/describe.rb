@@ -58,8 +58,7 @@ module Jira
       # @return [String] formatted summary string
       #
       def description(ticket, star=false, verbose=false)
-        json = @api.get("issue/#{ticket}")
-        if @api.errorless?(json, verbose)
+        @api.get("issue/#{ticket}", nil, verbose) do |json|
           summary = json['fields']['summary']
           status = json['fields']['status']['name']
           assignee = json['fields']['assignee']['name']

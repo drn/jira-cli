@@ -3,27 +3,26 @@ module Jira
 
     desc "transition", "Transitions the input ticket to the next state"
     def transition(ticket=Jira::Core.ticket)
-      json = @api.get("issue/#{ticket}/transitions")
-      return if !@api.errorless?(json)
+      @api.get("issue/#{ticket}/transitions") do |json|
+        options = {}
+        json['transitions'].each do |transition|
+          options[transition['name']] = transition['id']
+        end
+        options['Cancel'] = nil
 
-      options = {}
-      json['transitions'].each do |transition|
-        options[transition['name']] = transition['id']
-      end
-      options['Cancel'] = nil
-
-      self.cli.choose do |menu|
-        menu.index = :number
-        menu.index_suffix = ") "
-        menu.header = "Transitions Available For #{ticket}"
-        menu.prompt = "Select a transition: "
-        options.keys.each do |choice|
-          menu.choice choice do
-            transition_id = options[choice]
-            if transition_id.nil?
-              puts "No transition was performed on #{ticket}."
-            else
-              self.api_transition(ticket, transition_id, choice)
+        self.cli.choose do |menu|
+          menu.index = :number
+          menu.index_suffix = ") "
+          menu.header = "Transitions Available For #{ticket}"
+          menu.prompt = "Select a transition: "
+          options.keys.each do |choice|
+            menu.choice choice do
+              transition_id = options[choice]
+              if transition_id.nil?
+                puts "No transition was performed on #{ticket}."
+              else
+                self.api_transition(ticket, transition_id, choice)
+              end
             end
           end
         end
@@ -33,11 +32,8 @@ module Jira
     protected
 
       def api_transition(ticket, transition, description)
-        json = @api.post(
-          "issue/#{ticket}/transitions",
-          { transition: { id: transition } }
-        )
-        if @api.errorless?(json)
+        params = { transition: { id: transition } }
+        @api.post("issue/#{ticket}/transitions", params) do |json|
           puts "Successfully performed transition (#{description}) "\
                "on ticket #{ticket}."
         end
