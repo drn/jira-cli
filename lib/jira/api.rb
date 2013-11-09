@@ -30,7 +30,20 @@ module Jira
     # @return [JSON] parsed API response
     #
     def post(path, params={})
-      response = @client.post(self.endpoint(path), params, self.headers)
+      response = @client.post(self.endpoint(path), params.to_json, self.headers)
+      return response.body.to_s.from_json
+    end
+
+    #
+    # Issue an API PUT request and return parsed JSON
+    #
+    # @param path [String] API path
+    # @parma params [Hash] params to put
+    #
+    # @return [JSON] parsed API response
+    #
+    def put(path, params={})
+      response = @client.put(self.endpoint(path), params.to_json, self.headers)
       return response.body.to_s.from_json
     end
 

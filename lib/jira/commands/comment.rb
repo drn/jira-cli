@@ -7,7 +7,7 @@ module Jira
       if comment.strip.empty?
         puts "No comment posted."
       else
-        json = @api.post("issue/#{ticket}/comment", { body: comment }.to_json)
+        json = @api.post("issue/#{ticket}/comment", { body: comment })
         if json['errorMessages'].nil?
           puts "Successfully posted your comment."
         else

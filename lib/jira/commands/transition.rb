@@ -34,7 +34,7 @@ module Jira
       def api_transition(ticket, transition, description)
         json = @api.post(
           "issue/#{ticket}/transitions",
-          { transition: { id: transition } }.to_json
+          { transition: { id: transition } }
         )
         if json.empty?
           puts "Successfully performed transition (#{description}) "\
