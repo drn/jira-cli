@@ -3,8 +3,12 @@ module Jira
 
     desc "describe", "Describes the input ticket"
     def describe(ticket=Jira::Core.ticket)
-      output = description(ticket.strip, false, true)
-      puts output if !output.strip.empty?
+      if Jira::Core.ticket?(ticket)
+        output = description(ticket.strip, false, true)
+        puts output if !output.strip.empty?
+      else
+        puts "The ticket #{ticket} is not a valid JIRA ticket."
+      end
     end
 
     desc "all", "Describes all local branches that match JIRA ticketing syntax"
