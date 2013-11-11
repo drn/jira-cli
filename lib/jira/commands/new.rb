@@ -30,6 +30,7 @@ module Jira
         self.api.post("issue", params) do |json|
           ticket = json['key']
           `git checkout -b #{ticket} 2> /dev/null`
+          `git checkout #{ticket} 2> /dev/null`
           puts "\nTicket and branch #{Jira::Format.ticket(ticket)} created."
           return
         end
