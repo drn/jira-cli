@@ -6,15 +6,15 @@ module Jira
       self.api.get("issue/#{ticket}/transitions") do |json|
         options = {}
         json['transitions'].each do |transition|
-          options[transition['name']] = transition['id']
+          options[transition['to']['name']] = transition['id']
         end
         options['Cancel'] = nil
 
         self.cli.choose do |menu|
           menu.index = :number
           menu.index_suffix = ") "
-          menu.header = "Transitions Available For #{ticket}"
-          menu.prompt = "Select a transition: "
+          menu.header = "Transition #{Jira::Format.ticket(ticket)} to:"
+          menu.prompt = "Transition to: "
           options.keys.each do |choice|
             menu.choice choice do
               transition_id = options[choice]
