@@ -31,4 +31,8 @@ class String
     JSON.parse(self) rescue {}
   end
 
+  def periodize
+    self.strip[-1] == "." ? self : self + "."
+  end
+
 end
