@@ -6,6 +6,7 @@ require 'jira/core'
 require 'jira/api'
 require 'jira/format'
 require 'jira/mixins'
+require 'jira/exceptions'
 # include jira/commands/*
 Dir.glob(
   File.dirname(File.absolute_path(__FILE__)) + '/jira/commands/*',
@@ -17,9 +18,17 @@ module Jira
 
     def initialize(args=[], options={}, config={})
       super
-      Jira::Core.setup
-      self.api
+      self.suppress{ Jira::Core.setup }
+      self.suppress{ self.api }
     end
+
+    protected
+
+      def suppress
+        yield
+      rescue GitException
+      rescue InstallationException
+      end
 
   end
 end

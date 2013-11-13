@@ -73,10 +73,7 @@ module Jira
       #
       def root_path
         return @root_path if !@root_path.nil?
-        if !system('git rev-parse 2> /dev/null')
-          puts "JIRA commands can only be run within a git repository."
-          abort
-        end
+        raise GitException.new if !system('git rev-parse 2> /dev/null')
         @root_path ||= `git rev-parse --show-toplevel`.strip
       end
 
@@ -89,7 +86,7 @@ module Jira
         # @return [String] JIRA password
         #
         def auth
-          self.read(self.auth_path).split(':')
+          @auth ||= self.read(self.auth_path).split(':')
         end
 
         ### Core Actions
@@ -99,6 +96,7 @@ module Jira
         #
         def discard_memoized
           @url = nil
+          @auth = nil
           @username = nil
           @password = nil
         end
@@ -121,10 +119,7 @@ module Jira
         # @param path [String] path to validate
         #
         def validate_path!(path)
-          if !File.exists?(path)
-            say "Please run `jira install` before running this command."
-            abort
-          end
+          raise InstallationException.new if !File.exists?(path)
         end
 
     end

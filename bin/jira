@@ -1,5 +1,11 @@
 #!/usr/bin/ruby
 
 require 'jira'
-
-Jira::CLI.start
+begin
+  Jira::CLI.start
+rescue GitException
+  puts "JIRA commands can only be run within a git repository."
+rescue InstallationException
+  puts "Please run #{Jira::Format.summary('jira install')} before "\
+      "running this command."
+end
