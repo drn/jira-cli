@@ -6,8 +6,6 @@ module Jira
       if Jira::Core.ticket?(ticket)
         output = description(ticket.strip, false, true)
         puts output if !output.strip.empty?
-      else
-        puts "The ticket #{ticket} is not a valid JIRA ticket."
       end
     end
 
@@ -22,7 +20,7 @@ module Jira
       branches = `git branch`.strip.split("\n")
       branches.each do |branch|
         ticket = branch.delete('*').strip
-        if Jira::Core.ticket?(ticket)
+        if Jira::Core.ticket?(ticket, false)
           if branch.include?('*')
             tickets[:current] = ticket
           else

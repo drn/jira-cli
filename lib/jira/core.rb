@@ -42,14 +42,20 @@ module Jira
 
       #
       # Determines whether or not the input ticket matches the expected JIRA
-      # ticketing syntax.
+      # ticketing syntax. Outputs a warning that the input ticket isn't a valid
+      # ticket.
       #
       # @param ticket [String] input ticket name
+      # @param verbose [Boolean] verbose output of the ticket warning
       #
       # @return [Boolean] whether input string matches JIRA ticket syntax
       #
-      def ticket?(ticket)
-        !!ticket.to_s[/^[a-zA-Z]+-[0-9]+$/]
+      def ticket?(ticket, verbose=true)
+        !!ticket.to_s[/^[a-zA-Z]+-[0-9]+$/] and return true
+        if verbose
+          puts "#{Jira::Format.ticket(ticket)} is not a valid JIRA ticket."
+        end
+        return false
       end
 
       ### Relevant Paths
