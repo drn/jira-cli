@@ -13,7 +13,7 @@ module Jira
         self.cli.choose do |menu|
           menu.index = :number
           menu.index_suffix = ") "
-          menu.header = "Transition #{Jira::Format.ticket(ticket)} to:"
+          menu.header = "Transition #{Jira::Format.ticket(ticket)} to"
           menu.prompt = "Transition to: "
           options.keys.each do |choice|
             menu.choice choice do
