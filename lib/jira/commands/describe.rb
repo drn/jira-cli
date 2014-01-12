@@ -4,7 +4,7 @@ module Jira
     desc "describe", "Describes the input ticket"
     def describe(ticket=Jira::Core.ticket)
       if Jira::Core.ticket?(ticket)
-        output = description(ticket.strip, false, true)
+        output = description(ticket.strip, false, true, true)
         puts output if !output.strip.empty?
       end
     end
@@ -59,16 +59,19 @@ module Jira
       #
       # @return [String] formatted summary string
       #
-      def description(ticket, star=false, verbose=false)
+      def description(ticket, star=false, verbose=false, describe=false)
         self.api.get("issue/#{ticket}", nil, verbose) do |json|
           summary = json['fields']['summary']
           status = json['fields']['status']['name']
           assignee = json['fields']['assignee']['name']
+          description = describe ? "\n" + json['fields']['description'] : ""
+
           return Jira::Format.ticket(ticket) +
                 (star ? Jira::Format.star : " ") + "  " +
                 ("(" + Jira::Format.user(assignee) + ")").ljust(20) +
                 Jira::Format.status(status).ljust(26) +
-                Jira::Format.summary(summary)
+                Jira::Format.summary(summary) +
+                description
         end
         return ""
       end
