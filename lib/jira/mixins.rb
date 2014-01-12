@@ -4,6 +4,7 @@ module Jira
     require 'highline/import'
     require 'json'
     require 'faraday'
+    require 'pry-remote' rescue nil
     include Thor::Actions
 
     protected
