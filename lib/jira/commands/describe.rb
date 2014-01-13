@@ -64,7 +64,7 @@ module Jira
           summary = json['fields']['summary']
           status = json['fields']['status']['name']
           assignee = json['fields']['assignee']['name']
-          description = describe ? "\n" + json['fields']['description'] : ""
+          description = describe ? "\n" + json['fields']['description'].to_s : ""
 
           return Jira::Format.ticket(ticket) +
                 (star ? Jira::Format.star : " ") + "  " +
