@@ -29,11 +29,12 @@ module Jira
         # post issue to server
         self.api.post("issue", params) do |json|
           ticket = json['key']
-          prompt = "\nTicket #{Jira::Format.ticket(ticket)} created."\
-                   " Checkout branch? (yes/no) "
-          if self.cli.agree(prompt)
-            `git checkout -b #{ticket} 2> /dev/null`
-            `git checkout #{ticket} 2> /dev/null`
+          puts "\nTicket #{Jira::Format.ticket(ticket)} created."
+          if self.cli.agree("Create branch? (yes/no) ")
+            `git branch #{ticket} 2> /dev/null`
+            if self.cli.agree("Checkout branch? (yes/no) ")
+              `git checkout #{ticket} 2> /dev/null`
+            end
           end
           return
         end
