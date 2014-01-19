@@ -15,7 +15,22 @@ This tool is in very early alpha and its architecture and commands
 are expected to change drastically. Please only use this tool for testing
 purposes.
 
-## Installation
+## Gem Installation
+
+Rubygems:
+
+    gem install jira-cli
+
+Manually:
+
+    git clone git@github.com:darrenli/jira-cli.git
+    cd jira-cli
+    ./install
+
+## Project Installation
+
+In order to use this tool, you'll need to run the installation script in the
+git repository that you're managing via JIRA.
 
     cd path/to/jira/repo
     jira install
