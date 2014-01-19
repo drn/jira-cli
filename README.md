@@ -8,6 +8,7 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
 [![Coverage Status](https://coveralls.io/repos/darrenli/jira-cli/badge.png)](https://coveralls.io/r/darrenli/jira-cli)
 [![Dependency Status](https://gemnasium.com/darrenli/jira-cli.png)](https://gemnasium.com/darrenli/jira-cli)
 [![Code Climate](https://codeclimate.com/github/darrenli/jira-cli.png)](https://codeclimate.com/github/darrenli/jira-cli)
+[![Gem Version](https://badge.fury.io/rb/jira-cli.png)](http://badge.fury.io/rb/jira-cli)
 
 ## Disclaimer
 
