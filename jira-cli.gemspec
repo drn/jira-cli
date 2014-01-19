@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'highline', '~> 1.6.20', '>= 1.6.20'
   s.add_dependency 'faraday', '~> 0.8.8', '>= 0.8.9'
   s.add_development_dependency 'pry-remote', '~> 0.1.7', '>= 0.1.7'
+  s.add_development_dependency 'rspec', '~> 2.14.1', '>= 2.14.1'
 end
