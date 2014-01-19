@@ -1,3 +1,4 @@
+require 'spec_helper.rb'
 require 'jira/core'
 
 describe Jira::Core do
