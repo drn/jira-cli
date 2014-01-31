@@ -29,7 +29,9 @@ module Jira
         # post issue to server
         self.api.post("issue", params) do |json|
           ticket = json['key']
-          puts "\nTicket #{Jira::Format.ticket(ticket)} created."
+          `echo #{Jira::Core.url}/browse/#{ticket} | pbcopy`
+          puts "\nTicket #{Jira::Format.ticket(ticket)} created and copied"\
+               " to your clipboard."
           if self.cli.agree("Create branch? (yes/no) ")
             `git branch #{ticket} 2> /dev/null`
             if self.cli.agree("Checkout branch? (yes/no) ")
