@@ -29,7 +29,7 @@ module Jira
         # post issue to server
         self.api.post("issue", params) do |json|
           ticket = json['key']
-          self.copy(ticket)
+          self.clipboard(ticket)
           puts "\nTicket #{Jira::Format.ticket(ticket)} created and copied"\
                " to your clipboard."
           if self.cli.agree("Create branch? (yes/no) ")
