@@ -1,10 +1,10 @@
 module Jira
   class CLI < Thor
 
-    require 'highline/import'
     require 'json'
     require 'faraday'
     require 'pry-remote' rescue nil
+    require 'inquirer'
     include Thor::Actions
 
     protected
@@ -12,8 +12,8 @@ module Jira
       #
       # @return [Highline] HighLine instance for handling input
       #
-      def cli
-        @highline ||= ::HighLine.new
+      def io
+        @io ||= Jira::IO.new
       end
 
       #

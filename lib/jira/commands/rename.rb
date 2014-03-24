@@ -4,7 +4,7 @@ module Jira
     desc "rename", "Updates the summary of the input ticket"
     def rename(ticket=Jira::Core.ticket)
       self.describe(ticket)
-      summary = self.cli.ask("What should the new ticket summary be?")
+      summary = self.io.ask("New ticket summary?")
       if !summary.strip.empty?
         params =  { fields: { summary: summary } }
         self.api.put("issue/#{ticket}", params) do |json|

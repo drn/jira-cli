@@ -10,21 +10,11 @@ module Jira
         end
         options['Cancel'] = nil
 
-        self.cli.choose do |menu|
-          menu.index = :number
-          menu.index_suffix = ") "
-          menu.header = "Transition #{Jira::Format.ticket(ticket)} to"
-          menu.prompt = "Transition to: "
-          options.keys.each do |choice|
-            menu.choice choice do
-              transition_id = options[choice]
-              if transition_id.nil?
-                puts "No transition was performed on #{ticket}."
-              else
-                self.api_transition(ticket, transition_id, choice)
-              end
-            end
-          end
+        choice = self.io.choose("Transition to", options.keys)
+        if options[choice].nil?
+          puts "No transition was performed on #{ticket}."
+        else
+          self.api_transition(ticket, transition_id, choice)
         end
       end
     end

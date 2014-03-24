@@ -13,8 +13,8 @@ module Jira
         return if issue_type.empty?
 
         # determine summary and description
-        summary = self.cli.ask("\nSummary: ")
-        description = self.cli.ask("Description:")
+        summary = self.io.ask("Summary")
+        description = self.io.ask("Description")
 
         # determine api parameters
         params = {
@@ -32,9 +32,9 @@ module Jira
           self.clipboard(ticket)
           puts "\nTicket #{Jira::Format.ticket(ticket)} created and copied"\
                " to your clipboard."
-          if self.cli.agree("Create branch? (yes/no) ")
+          if self.io.agree("Create branch")
             `git branch #{ticket} 2> /dev/null`
-            if self.cli.agree("Checkout branch? (yes/no) ")
+            if self.io.agree("Check-out branch")
               `git checkout #{ticket} 2> /dev/null`
             end
           end
@@ -64,22 +64,9 @@ module Jira
           projects[project['name']] = data
         end
         projects['Cancel'] = nil
-
-        self.cli.choose do |menu|
-          menu.index = :number
-          menu.index_suffix = ") "
-          menu.header = "Select a project to create issue under"
-          menu.prompt = "Project: "
-          projects.keys.each do |choice|
-            menu.choice choice do
-              project_data = projects[choice]
-              if !project_data.nil?
-                return project_data
-              end
-            end
-          end
-        end
-        return {}
+        choice = self.io.choose("Select a project", projects.keys)
+        return {} if choice == 'Cancel'
+        return projects[choice]
       end
 
       #
@@ -96,22 +83,9 @@ module Jira
           issue_types[issue_type['name']] = issue_type['id']
         end
         issue_types['Cancel'] = nil
-
-        self.cli.choose do |menu|
-          menu.index = :number
-          menu.index_suffix = ") "
-          menu.header = "\nSelect an issue type"
-          menu.prompt = "Issue type: "
-          issue_types.keys.each do |choice|
-            menu.choice choice do
-              issue_type_id = issue_types[choice]
-              if !issue_type_id.nil?
-                return issue_type_id
-              end
-            end
-          end
-        end
-        return ""
+        choice = self.io.choose("Select an issue type", issue_types.keys)
+        return '' if choice == 'Cancel'
+        return issue_types[choice]
       end
 
   end

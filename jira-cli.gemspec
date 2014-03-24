@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_dependency 'thor', '~> 0.18.1', '>= 0.18.1'
-  s.add_dependency 'highline', '~> 1.6.20', '>= 1.6.20'
   s.add_dependency 'faraday', '~> 0.9.0', '>= 0.9.0'
+  s.add_dependency 'inquirer', '~> 0.2.0', '>= 0.2.0'
   s.add_development_dependency 'pry-remote', '~> 0.1.7', '>= 0.1.7'
   s.add_development_dependency 'rspec', '~> 2.14.1', '>= 2.14.1'
   s.add_development_dependency 'coveralls', '~> 0.7.0', '>= 0.7.0'

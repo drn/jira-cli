@@ -3,7 +3,7 @@ module Jira
 
     desc "comment", "Add a comment to the input ticket"
     def comment(ticket=Jira::Core.ticket)
-      comment = self.cli.ask("Leave a comment for ticket #{ticket}:")
+      comment = self.io.ask("Leave a comment for ticket #{ticket}")
       if comment.strip.empty?
         puts "No comment posted."
       else
