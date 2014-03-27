@@ -10,11 +10,14 @@ module Jira
         end
         options['Cancel'] = nil
 
-        choice = self.io.choose("Transition to", options.keys)
+        choice = self.io.choose(
+          "Transition #{Jira::Format.ticket(ticket)} to",
+          options.keys
+        )
         if options[choice].nil?
           puts "No transition was performed on #{ticket}."
         else
-          self.api_transition(ticket, transition_id, choice)
+          self.api_transition(ticket, options[choice], choice)
         end
       end
     end
