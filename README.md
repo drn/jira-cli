@@ -16,7 +16,7 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
     jira comment         # Add a comment to the input ticket
     jira comments        # Lists the comments of the input ticket
     jira commit          # Commits uncommitted work with the ticket name and summary.
-    jira copy            # Copies the url of the JIRA ticket into the clipboard
+    jira clipboard       # Copies the url of the JIRA ticket into the clipboard
     jira describe        # Describes the input ticket
     jira install         # Guides the user through JIRA installation
     jira log             # Logs work against the input ticket
