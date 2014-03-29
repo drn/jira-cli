@@ -1,16 +1,8 @@
 # dependencies
 require 'thor'
-# core logic
-require 'jira/constants'
-require 'jira/core'
-require 'jira/api'
-require 'jira/io'
-require 'jira/format'
-require 'jira/mixins'
-require 'jira/exceptions'
-# include jira/commands/*
+# core logic and commands
 Dir.glob(
-  File.dirname(File.absolute_path(__FILE__)) + '/jira/commands/*',
+  File.dirname(File.absolute_path(__FILE__)) + '/jira/**/*.rb',
   &method(:require)
 )
 
