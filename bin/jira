@@ -8,4 +8,5 @@ rescue GitException
 rescue InstallationException
   puts "Please run #{Jira::Format.summary('jira install')} before "\
       "running this command."
+rescue Interrupt
 end
