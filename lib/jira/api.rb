@@ -1,10 +1,23 @@
 module Jira
   class API
 
+    TYPES = [
+      :rest,
+      :agile
+    ].freeze
+
+    ENDPOINTS = {
+      rest:  'rest/api/2',
+      agile: 'rest/greenhopper/latest'
+    }.freeze
+
     #
     # Initialize Jira::API
     #
-    def initialize
+    # @param type [Symbol]
+    #
+    def initialize(type)
+      @type = type
       @client = Faraday.new
       @client.basic_auth(Jira::Core.username, Jira::Core.password)
 
@@ -71,7 +84,7 @@ module Jira
       # @return [String] API endpoint
       #
       def endpoint(path)
-        "#{Jira::Core.url}/rest/api/2/#{path}"
+        "#{Jira::Core.url}/#{ENDPOINTS[@type]}/#{path}"
       end
 
       #

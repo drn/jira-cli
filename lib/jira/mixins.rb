@@ -17,10 +17,18 @@ module Jira
       end
 
       #
+      # @param [Symbol]
+      #
       # @return [Jira::API] Jira API class
       #
-      def api
-        @api ||= Jira::API.new
+      def api(type=:rest)
+        key = "@api_#{type}"
+        klass = self.instance_variable_get(key)
+        if klass.nil?
+          klass = Jira::API.new(type)
+          self.instance_variable_set(key, klass)
+        end
+        return klass
       end
 
   end
