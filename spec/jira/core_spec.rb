@@ -14,7 +14,7 @@ describe Jira::Core do
   context "url" do
     it "should memoize " do
       expect(Jira::Core.instance_variable_get(:@url)).to be(nil)
-      Jira::Core.stub(:read){ 'url' }
+      expect(Jira::Core).to receive(:read) { 'url' }
       expect(Jira::Core.url).to be_an_instance_of(String)
       expect(Jira::Core.instance_variable_get(:@url)).to_not be(nil)
     end
