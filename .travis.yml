@@ -1,8 +1,11 @@
 language: ruby
 rvm:
-  - 1.9.3
-  - 2.0.0
   - 2.1.0
+env:
+  global:
+    - JIRA_URL='jira.example.com'
+    - JIRA_USERNAME='username'
+    - JIRA_PASSWORD='password'
 install: ./build.sh
 script: rspec
 notifications:
