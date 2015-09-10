@@ -4,7 +4,7 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
 
 * * *
 
-[![Build Status](https://travis-ci.org/darrenli/jira-cli.png?branch=master)](https://travis-ci.org/darrenli/jira-cli)
+[![Circle CI](https://circleci.com/gh/drn/jira-cli.svg?style=svg)](https://circleci.com/gh/drn/jira-cli)
 [![Dependency Status](https://gemnasium.com/darrenli/jira-cli.png)](https://gemnasium.com/darrenli/jira-cli)
 [![Code Climate](https://codeclimate.com/github/darrenli/jira-cli.png)](https://codeclimate.com/github/darrenli/jira-cli)
 

@@ -1,0 +1,7 @@
+machine:
+  ruby:
+    version: 2.1.7
+  environment:
+    JIRA_URL: jira.example.com
+    JIRA_USERNAME: username
+    JIRA_PASSWORD: password
