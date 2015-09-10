@@ -36,7 +36,7 @@ Manually:
 
     git clone git@github.com:darrenli/jira-cli.git
     cd jira-cli
-    ./install
+    ./scripts/install
 
 ### Project Installation
 
