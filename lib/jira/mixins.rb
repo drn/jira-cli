@@ -3,7 +3,6 @@ module Jira
 
     require 'json'
     require 'faraday'
-    require 'pry-remote' rescue nil
     require 'inquirer'
     include Thor::Actions
 
