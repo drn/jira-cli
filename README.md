@@ -11,6 +11,7 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
 ### Available Commands
 
     jira all             # Describes all local branches that match JIRA ticketing syntax
+    jira attachments     # View ticket attachments
     jira browse          # Opens the current input ticket in your browser
     jira comment         # Add a comment to the input ticket
     jira comments        # Lists the comments of the input ticket
