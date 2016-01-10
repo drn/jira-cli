@@ -63,7 +63,12 @@ module Jira
         self.api.get("issue/#{ticket}", nil, verbose) do |json|
           summary = json['fields']['summary']
           status = json['fields']['status']['name']
-          assignee = json['fields']['assignee']['name']
+          assignee = "nil"
+          if json['fields'].has_key?("assignee")
+            if !json['fields']['assignee'].nil?
+              assignee = json['fields']['assignee']['name']
+            end
+          end
           description = describe ? "\n" + json['fields']['description'].to_s : ""
 
           return Jira::Format.ticket(ticket) +
