@@ -27,7 +27,8 @@ module Jira
             time = Time.parse(comment['created'])
             body = comment['body']
 
-            puts "#{Jira::Format.user(author)} @ "\
+            printf "[%2d]", comments.index(comment)
+            puts "  #{Jira::Format.user(author)} @ "\
                  "#{Jira::Format.time(time)}:\n"\
                  "#{Jira::Format.comment(body)}"
           end
