@@ -7,7 +7,10 @@ module Jira
       if comment.strip.empty?
         puts "No comment posted."
       else
-        comment.gsub!(/\@[a-zA-Z]+/,'[~\0]').gsub!('[~@','[~')
+        temp = comment.gsub(/\@[a-zA-Z]+/,'[~\0]')
+        temp = comment if temp.nil?
+        temp = temp.gsub('[~@','[~')
+        comment = temp if !temp.nil?
         self.api.post("issue/#{ticket}/comment", { body: comment }) do |json|
           puts "Successfully posted your comment."
         end
