@@ -8,7 +8,9 @@ module Jira
 
       self.api.post("issue/#{ticket}/comment", { body: comment }) do |json|
         puts "Successfully posted your comment."
+        return
       end
+      puts "No comment posted."
     end
 
     desc "commentd", "Delete a comment to the input ticket"
@@ -38,7 +40,7 @@ module Jira
         if comments.count > 0
           comments.each do |comment|
             author = comment['author']['displayName']
-            time = Time.parse(comment['created'])
+            time = Time.parse(comment['updated'])
             body = comment['body']
 
             printf "[%2d]", comments.index(comment)
@@ -47,7 +49,7 @@ module Jira
                  "#{Jira::Format.comment(body)}"
           end
         else
-          puts "There are no comments on issue #{ticket}."
+          puts "There are no comments on ticket #{ticket}."
         end
       end
     end
