@@ -72,7 +72,7 @@ module Jira
           description = describe ? "\n" + json['fields']['description'].to_s : ""
 
           return Jira::Format.ticket(ticket) +
-                (star ? Jira::Format.star : " ") + "  " +
+                (star ? Jira::Format.star : " ") + "  \t" +
                 ("(" + Jira::Format.user(assignee) + ")").ljust(20) +
                 Jira::Format.status(status).ljust(26) +
                 Jira::Format.summary(summary) +
