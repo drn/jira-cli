@@ -2,7 +2,7 @@ module Jira
   class CLI < Thor
 
     desc "new", "Creates a new ticket in JIRA and checks out the git branch"
-    def new
+    def new(ticket = Jira::Core.ticket)
       self.api.get("issue/createmeta") do |meta|
         # determine project
         project = self.select_project(meta)
@@ -10,7 +10,12 @@ module Jira
 
         # determine issue type
         issue_type = self.select_issue_type(project)
-        return if issue_type.empty?
+        return if issue_type.nil?
+
+        # determine parent (ticket)
+        parent = nil
+        parent = ticket if issue_type['subtask']
+        return if !parent.nil? and !Jira::Core.ticket?(parent)
 
         # determine summary and description
         summary = self.io.ask("Summary")
@@ -20,11 +25,12 @@ module Jira
         params = {
           fields: {
             project:     { id: project[:id] },
-            issuetype:   { id: issue_type },
+            issuetype:   { id: issue_type['id'] },
             summary:     summary,
             description: description
           }
         }
+        params[:fields][:parent] = { key: parent } if !parent.nil?
 
         # post issue to server
         self.api.post("issue", params) do |json|
@@ -75,16 +81,15 @@ module Jira
       #
       # @param project_data [Hash] project metadata
       #
-      # @return [String] selected issue type
+      # @return [Hash] selected issue type
       #
       def select_issue_type(project_data)
         issue_types = {}
         project_data[:issues].each do |issue_type|
-          issue_types[issue_type['name']] = issue_type['id']
+          issue_types[issue_type['name']] = issue_type
         end
         issue_types['Cancel'] = nil
         choice = self.io.choose("Select an issue type", issue_types.keys)
-        return '' if choice == 'Cancel'
         return issue_types[choice]
       end
 
