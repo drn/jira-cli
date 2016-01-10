@@ -11,6 +11,26 @@ module Jira
       end
     end
 
+    desc "commentd", "Delete a comment to the input ticket"
+    def commentd(ticket=Jira::Core.ticket)
+      comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
+
+      index = self.get_comment_index("delete")
+      puts "No comment deleted." and return if index < 0
+
+      self.api.get("issue/#{ticket}") do |json|
+        comments = json['fields']['comment']['comments']
+        if index < comments.count
+          id = comments[index]['id']
+          self.api.delete("issue/#{ticket}/comment/#{id}") do |json|
+            puts "Successfully deleted your comment."
+            return
+          end
+        end
+      end
+      puts "No comment deleted."
+    end
+
     desc "comments", "Lists the comments of the input ticket"
     def comments(ticket=Jira::Core.ticket)
       self.api.get("issue/#{ticket}") do |json|
