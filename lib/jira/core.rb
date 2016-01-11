@@ -7,7 +7,6 @@ module Jira
       #
       def setup
         self.url
-        self.auth
       end
 
       ### Virtual Attributes
@@ -16,21 +15,21 @@ module Jira
       # @return [String] JIRA project endpoint
       #
       def url
-        @url ||= ENV['JIRA_URL'] || self.read(self.url_path)
+        @url ||= ENV['JIRA_URL'] || self.read(self.cli_path)[:global]['url']
       end
 
       #
       # @return [String] JIRA username
       #
       def username
-        @username ||= ENV['JIRA_USERNAME'] || self.auth.first
+        @username ||= ENV['JIRA_USERNAME'] || self.read(self.cli_path)[:global]['username']
       end
 
       #
       # @return [String] JIRA password
       #
       def password
-        @password ||= ENV['JIRA_PASSWORD'] || self.auth.last
+        @password ||= ENV['JIRA_PASSWORD'] || self.read(self.cli_path)[:global]['password']
       end
 
       #
@@ -61,17 +60,10 @@ module Jira
       ### Relevant Paths
 
       #
-      # @return [String] path to .jira-url file
+      # @return [String] path to .jira-cli file
       #
-      def url_path
-        @url_path ||= self.root_path + "/.jira-url"
-      end
-
-      #
-      # @return [String] path to .jira-auth file
-      #
-      def auth_path
-        @auth_path ||= self.root_path + "/.jira-auth"
+      def cli_path
+        @cli_path ||= self.root_path + "/.jira-cli"
       end
 
       #
@@ -85,16 +77,6 @@ module Jira
 
       protected
 
-        #
-        # Determines and parses the auth file
-        #
-        # @return [String] JIRA username
-        # @return [String] JIRA password
-        #
-        def auth
-          @auth ||= self.read(self.auth_path).split(':')
-        end
-
         ### Core Actions
 
         #
@@ -102,7 +84,6 @@ module Jira
         #
         def discard_memoized
           @url = nil
-          @auth = nil
           @username = nil
           @password = nil
         end
@@ -112,11 +93,11 @@ module Jira
         #
         # @param path [String] path of file to read
         #
-        # @return [String] contents of the file at the input path
+        # @return [Object] IniFile object of the file at the input path
         #
         def read(path)
           self.validate_path!(path)
-          File.read(path).strip
+          IniFile.load(path, { :comment => '#', :encoding => 'UTF-8' })
         end
 
         #

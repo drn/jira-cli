@@ -8,16 +8,20 @@ module Jira
     desc "install", "Guides the user through JIRA installation"
     def install
 
-      create_file(Jira::Core.url_path, nil, verbose:false) do
-        self.io.ask("Enter your JIRA URL")
-      end
+      inifile = IniFile.new(:comment => '#', :encoding => 'UTF-8', :filename => Jira::Core.cli_path)
 
-      create_file(Jira::Core.auth_path, nil, verbose:false) do
-        username = self.io.ask("Enter your JIRA username")
-        # TODO - hide password input
-        password = self.io.ask("Enter your JIRA password")
-        "#{username}:#{password}"
-      end
+      url = self.io.ask("Enter your JIRA URL")
+
+      username = self.io.ask("Enter your JIRA username")
+      # TODO - hide password input
+      password = self.io.ask("Enter your JIRA password")
+
+      inifile[:global] = {
+        url: url,
+        username: username,
+        password: password
+      }
+      inifile.write
 
       Jira::Core.send(:discard_memoized)
     end

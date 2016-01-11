@@ -4,6 +4,7 @@ module Jira
     require 'json'
     require 'faraday'
     require 'inquirer'
+    require 'inifile'
     include Thor::Actions
 
     protected
