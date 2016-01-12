@@ -9,7 +9,7 @@ module Jira
       end
     end
 
-    desc "logs", "Lists the worklog of the input ticket"
+    desc "logs", "Lists work against the input ticket"
     def logs(ticket=Jira::Core.ticket)
       self.api.get("issue/#{ticket}/worklog") do |json|
         worklogs = json['worklogs']
@@ -30,5 +30,45 @@ module Jira
       end
     end
 
+    desc "logu", "Updates work against the input ticket"
+    def logu(ticket=Jira::Core.ticket)
+      logs(ticket) if self.io.agree("List worklogs for ticket #{ticket}")
+
+      index = self.get_worklog_index("update")
+      puts "No worklog updated." and return if index < 0
+
+      time_spent = self.io.ask("Time spent on #{ticket}").strip
+      puts "No worklog updated." and return if time_spent.empty?
+
+      self.api.get("issue/#{ticket}/worklog") do |json|
+        worklogs = json['worklogs']
+        if index < worklogs.count
+          id = worklogs[index]['id']
+          self.api.put("issue/#{ticket}/worklog/#{id}", { timeSpent: time_spent }) do |json|
+            puts "Successfully updated #{time_spent} on #{ticket}."
+            return
+          end
+        end
+      end
+      puts "No worklog updated."
+    end
+
+    protected
+
+      #
+      # Prompts the user for a worklog index, then returns the
+      # worklog index; failure is < 0
+      #
+      # @param description [String] describes the user prompt
+      #
+      # @return index [Integer] asked comment index
+      #
+      def get_worklog_index(description = "")
+        response = self.io.ask("Index for worklog to #{description}").strip
+        return -1 if response.empty?
+        index = response.to_i
+        return -1 if index < 0
+        index
+      end
   end
 end
