@@ -3,10 +3,31 @@ module Jira
 
     desc "log", "Logs work against the input ticket"
     def log(ticket=Jira::Core.ticket)
-      time_spent = self.io.ask("Time spent on #{ticket}")
+      time_spent = self.io.ask("Time spent on ticket #{ticket}")
       self.api.post("issue/#{ticket}/worklog", { timeSpent: time_spent }) do |json|
-        puts "Successfully logged #{time_spent} on #{ticket}."
+        puts "Successfully logged #{time_spent} on ticket #{ticket}."
       end
+    end
+
+    desc "logd", "Deletes work against the input ticket"
+    def logd(ticket=Jira::Core.ticket)
+      logs(ticket) if self.io.agree("List worklogs for ticket #{ticket}")
+
+      index = self.get_worklog_index("delete")
+      puts "No worklog deleted." and return if index < 0
+
+      self.api.get("issue/#{ticket}/worklog") do |json|
+        worklogs = json['worklogs']
+        if index < worklogs.count
+          id = worklogs[index]['id']
+          time_spent = worklogs[index]['timeSpent']
+          self.api.delete("issue/#{ticket}/worklog/#{id}") do |json|
+            puts "Successfully deleted #{time_spent} on ticket #{ticket}"
+            return
+          end
+        end
+      end
+      puts "No worklog deleted."
     end
 
     desc "logs", "Lists work against the input ticket"
@@ -45,7 +66,7 @@ module Jira
         if index < worklogs.count
           id = worklogs[index]['id']
           self.api.put("issue/#{ticket}/worklog/#{id}", { timeSpent: time_spent }) do |json|
-            puts "Successfully updated #{time_spent} on #{ticket}."
+            puts "Successfully updated #{time_spent} on ticket #{ticket}."
             return
           end
         end
