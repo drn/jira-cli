@@ -10,6 +10,23 @@ module Jira
       puts "No watch."
     end
 
+    desc "watchers", "List the watchers of the input ticket"
+    def watchers(ticket=Jira::Core.ticket)
+      self.api.get("issue/#{ticket}/watchers") do |json|
+        watchers = json['watchers']
+        if watchers.count > 0
+          watchers.each do |watcher|
+            displayName = watcher['displayName']
+
+            printf "[%2d]", watchers.index(watcher)
+            puts "  #{Jira::Format.user(displayName)}"
+          end
+        else
+          puts "There are no watchers on ticket #{ticket}."
+        end
+      end
+    end
+
     desc "unwatch", "Unwatch against the input ticket"
     def unwatch(ticket=Jira::Core.ticket)
       username = Jira::Core.username
