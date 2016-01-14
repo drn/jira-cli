@@ -10,6 +10,23 @@ module Jira
       puts "No vote."
     end
 
+    desc "votes", "List the votes of the input ticket"
+    def votes(ticket=Jira::Core.ticket)
+      self.api.get("issue/#{ticket}/votes") do |json|
+        voters = json['voters']
+        if voters.count > 0
+          voters.each do |voter|
+            displayName = voter['displayName']
+
+            printf "[%2d]", voters.index(voter)
+            puts "  #{Jira::Format.user(displayName)}"
+          end
+        else
+          puts "There are no votes on ticket #{ticket}."
+        end
+      end
+    end
+
     desc "unvote", "Unvote against the input ticket"
     def unvote(ticket=Jira::Core.ticket)
       username = Jira::Core.username
