@@ -13,8 +13,7 @@ module Jira
       url = self.io.ask("Enter your JIRA URL")
 
       username = self.io.ask("Enter your JIRA username")
-      # TODO - hide password input
-      password = self.io.ask("Enter your JIRA password")
+      password = self.io.ask("Enter your JIRA password", password: true)
 
       inifile[:global] = {
         url: url,
