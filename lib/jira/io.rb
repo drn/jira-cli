@@ -1,8 +1,8 @@
 module Jira
   class IO
 
-    def ask(prompt)
-      Ask.input(prompt)
+    def ask(*args)
+      Ask.input(*args)
     end
 
     def agree(prompt)
