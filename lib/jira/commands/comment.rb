@@ -17,7 +17,7 @@ module Jira
     def commentd(ticket=Jira::Core.ticket)
       comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
 
-      index = self.get_comment_index("delete")
+      index = self.get_type_of_index("comment", "delete")
       puts "No comment deleted." and return if index < 0
 
       self.api.get("issue/#{ticket}") do |json|
@@ -58,7 +58,7 @@ module Jira
     def commentu(ticket=Jira::Core.ticket)
       comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
 
-      index = self.get_comment_index("update")
+      index = self.get_type_of_index("comment", "update")
       puts "No comment updated." and return if index < 0
 
       comment = self.get_comment_body(ticket)
@@ -90,20 +90,6 @@ module Jira
         temp = temp.gsub('[~@','[~')
         comment = temp if !temp.nil?
         comment
-      end
-
-      #
-      # Prompts the user for a comment index, then returns the
-      # comment index; failure is < 0
-      #
-      # @return index [Integer] asked comment index
-      #
-      def get_comment_index(description = "")
-        response = self.io.ask("Index for comment to #{description}").strip
-        return -1 if response.empty?
-        index = response.to_i
-        return -1 if index < 0
-        index
       end
 
   end

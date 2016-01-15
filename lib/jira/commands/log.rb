@@ -13,7 +13,7 @@ module Jira
     def logd(ticket=Jira::Core.ticket)
       logs(ticket) if self.io.agree("List worklogs for ticket #{ticket}")
 
-      index = self.get_worklog_index("delete")
+      index = self.get_type_of_index("worklog", "delete")
       puts "No worklog deleted." and return if index < 0
 
       self.api.get("issue/#{ticket}/worklog") do |json|
@@ -55,7 +55,7 @@ module Jira
     def logu(ticket=Jira::Core.ticket)
       logs(ticket) if self.io.agree("List worklogs for ticket #{ticket}")
 
-      index = self.get_worklog_index("update")
+      index = self.get_type_of_index("worklog", "update")
       puts "No worklog updated." and return if index < 0
 
       time_spent = self.io.ask("Time spent on #{ticket}").strip
@@ -73,24 +73,6 @@ module Jira
       end
       puts "No worklog updated."
     end
-
-    protected
-
-      #
-      # Prompts the user for a worklog index, then returns the
-      # worklog index; failure is < 0
-      #
-      # @param description [String] describes the user prompt
-      #
-      # @return index [Integer] asked comment index
-      #
-      def get_worklog_index(description = "")
-        response = self.io.ask("Index for worklog to #{description}").strip
-        return -1 if response.empty?
-        index = response.to_i
-        return -1 if index < 0
-        index
-      end
 
   end
 end

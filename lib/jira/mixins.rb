@@ -31,6 +31,19 @@ module Jira
         return klass
       end
 
+      #
+      # Prompts the user for a type of index, then returns the
+      # it; failure is < 0
+      #
+      # @return index [Integer] asked type of index
+      #
+      def get_type_of_index(command, description)
+        response = self.io.ask("Index for #{command} to #{description}").strip
+        return -1 if response.empty?
+        index = response.to_i
+        return -1 if index < 0
+        index
+      end
   end
 end
 
