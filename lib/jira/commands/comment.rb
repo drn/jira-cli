@@ -15,22 +15,7 @@ module Jira
 
     desc "commentd", "Delete a comment to the input ticket"
     def commentd(ticket=Jira::Core.ticket)
-      comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
-
-      index = self.get_type_of_index("comment", "delete")
-      puts "No comment deleted." and return if index < 0
-
-      self.api.get("issue/#{ticket}") do |json|
-        comments = json['fields']['comment']['comments']
-        if index < comments.count
-          id = comments[index]['id']
-          self.api.delete("issue/#{ticket}/comment/#{id}") do |json|
-            puts "Successfully deleted your comment."
-            return
-          end
-        end
-      end
-      puts "No comment deleted."
+      self.comment_delete(ticket)
     end
 
     desc "comments", "Lists the comments of the input ticket"
@@ -56,26 +41,49 @@ module Jira
 
     desc "commentu", "Update a comment to the input ticket"
     def commentu(ticket=Jira::Core.ticket)
-      comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
-
-      index = self.get_type_of_index("comment", "update")
-      puts "No comment updated." and return if index < 0
-
-      comment = self.get_comment_body(ticket)
-      puts "No comment updated." and return if comment.empty?
-
-      self.api.get("issue/#{ticket}") do |json|
-        comments = json['fields']['comment']['comments']
-        id = comments[index]['id']
-        self.api.put("issue/#{ticket}/comment/#{id}", { body: comment }) do |json|
-          puts "Successfully updated your comment."
-          return
-        end
-      end
-      puts "No comment updated."
+      self.comment_update(ticket)
     end
 
     protected
+
+      def comment_delete(ticket)
+        comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
+
+        index = self.get_type_of_index("comment", "delete")
+        puts "No comment deleted." and return if index < 0
+
+        self.api.get("issue/#{ticket}") do |json|
+          comments = json['fields']['comment']['comments']
+          if index < comments.count
+            id = comments[index]['id']
+            self.api.delete("issue/#{ticket}/comment/#{id}") do |json|
+              puts "Successfully deleted your comment."
+              return
+            end
+          end
+        end
+        puts "No comment deleted."
+      end
+
+      def comment_update(ticket)
+        comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
+
+        index = self.get_type_of_index("comment", "update")
+        puts "No comment updated." and return if index < 0
+
+        comment = self.get_comment_body(ticket)
+        puts "No comment updated." and return if comment.empty?
+
+        self.api.get("issue/#{ticket}") do |json|
+          comments = json['fields']['comment']['comments']
+          id = comments[index]['id']
+          self.api.put("issue/#{ticket}/comment/#{id}", { body: comment }) do |json|
+            puts "Successfully updated your comment."
+            return
+          end
+        end
+        puts "No comment updated."
+      end
 
       #
       # Prompts the user for a comment body, strips it, then
