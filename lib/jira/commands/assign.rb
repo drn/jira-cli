@@ -10,7 +10,7 @@ module Jira
       self.api.put("issue/#{ticket}/assignee", { name: assignee }) do |json|
         return
       end
-      puts "No ticket assigned."
+      puts "Ticket #{ticket} not assigned."
     end
 
   end
