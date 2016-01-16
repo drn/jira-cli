@@ -2,7 +2,7 @@ module Jira
   class CLI < Thor
 
     desc "delete", "Deletes a ticket in JIRA and the git branch"
-    option :force, type: :boolean, default: false
+    method_option :force, type: :boolean, default: false
     def delete(ticket=Jira::Core.ticket)
       force = options[:force]
       self.api.get("issue/#{ticket}") do |json|
