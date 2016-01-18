@@ -21,6 +21,7 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
     jira delete          # Deletes a ticket in JIRA and the git branch
     jira describe        # Describes the input ticket
     jira install         # Guides the user through JIRA installation
+    jira link            # Creates a link between two tickets in JIRA
     jira log             # Logs work against the input ticket
     jira logd            # Deletes work against the input ticket
     jira logs            # Lists work against the input ticket
