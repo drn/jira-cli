@@ -10,12 +10,12 @@ module Jira
 
         # determine issue type
         issue_type = self.select_issue_type(project)
-        return if issue_type.nil?
+        break if issue_type.nil?
 
         # determine parent (ticket)
         parent = nil
         parent = ticket if issue_type['subtask']
-        return if !parent.nil? and !Jira::Core.ticket?(parent)
+        break if !parent.nil? and !Jira::Core.ticket?(parent)
 
         # determine summary and description
         summary = self.io.ask("Summary")
