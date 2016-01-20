@@ -2,18 +2,15 @@ module Jira
   class CLI < Thor
 
     desc "delete", "Deletes a ticket in JIRA and the git branch"
-    option :force, type: :boolean, default: false
+    method_option :force, type: :boolean, default: false
     def delete(ticket=Jira::Core.ticket)
       force = options[:force]
       self.api.get("issue/#{ticket}") do |json|
         issue_type = json['fields']['issuetype']
         if !issue_type['subtask']
-          if !json['fields']['subtasks'].empty?
+          if !json['fields']['subtasks'].empty? && !force
             force = self.io.agree("Delete all sub-tasks for ticket #{ticket}")
-            if !force
-              puts "No ticket deleted."
-              return
-            end
+            puts "No ticket deleted." and return if !force
           end
         end
 
@@ -26,10 +23,7 @@ module Jira
             puts "Creating a new branch."
             new_branch = self.io.ask("Branch").strip
             new_branch.delete!(" ")
-            if new_branch.empty?
-              puts "No ticket deleted."
-              return
-            end
+            puts "No ticket deleted." and return if new_branch.empty?
             `git branch #{new_branch} 2> /dev/null`
             branches << new_branch
           end
