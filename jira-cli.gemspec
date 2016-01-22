@@ -6,9 +6,9 @@ Gem::Specification.new do |s|
   s.name        = 'jira-cli'
   s.version     = Jira::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ['Darren Lin Cheng']
+  s.authors     = ['Darren Cheng']
   s.email       = 'darren@thanx.com'
-  s.homepage    = 'https://github.com/darrenli/jira-cli'
+  s.homepage    = 'https://github.com/drn/jira-cli'
   s.summary     = 'JIRA CLI'
   s.description = 'CLI used to manage JIRA workflows leveraging git'
   s.license     = 'MIT'
