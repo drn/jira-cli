@@ -31,10 +31,11 @@ module Jira
       if response.success?
         if json['errorMessage'].nil?
           respond_to(options[:success], json)
-          return
+          return json
         end
       end
       respond_to(options[:failure], json)
+      return json
     end
 
     def respond_to(block, json)
