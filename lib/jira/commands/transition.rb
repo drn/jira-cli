@@ -3,34 +3,68 @@ module Jira
 
     desc "transition", "Transitions the input ticket to the next state"
     def transition(ticket=Jira::Core.ticket)
-      self.api.get("issue/#{ticket}/transitions") do |json|
-        options = {}
-        json['transitions'].each do |transition|
-          options[transition['to']['name']] = transition['id']
-        end
-        options['Cancel'] = nil
-
-        choice = self.io.select(
-          "Transition #{Jira::Format.ticket(ticket)} to:",
-          options.keys
-        )
-        if options[choice].nil?
-          puts "No transition was performed on #{ticket}."
-        else
-          self.api_transition(ticket, options[choice], choice)
-        end
-      end
+      Command::Transition.new(ticket).run
     end
 
-    protected
+  end
 
-      def api_transition(ticket, transition, description)
-        params = { transition: { id: transition } }
-        self.api.post("issue/#{ticket}/transitions", params) do |json|
-          puts "Successfully performed transition (#{description}) "\
-               "on ticket #{ticket}."
-        end
+  module Command
+    class Transition < Base
+
+      attr_accessor :ticket
+
+      def initialize(ticket)
+        self.ticket = ticket
       end
 
+      def run
+        return if ticket.empty?
+        return if metadata.empty?
+        return if transition.empty?
+        api.post "issue/#{ticket}/transitions",
+          params:  params,
+          success: on_success,
+          failure: on_failure
+      end
+
+    private
+
+      def params
+        { transition: { id: transition } }
+      end
+
+      def on_success
+        ->{ puts "Transitioned ticket #{ticket} to #{transition_name}." }
+      end
+
+      def on_failure
+        ->{ puts "Failed to transition ticket #{ticket}." }
+      end
+
+      def transition_name
+        transitions.invert[transition]
+      end
+
+      def transition
+        @transition ||= transitions[
+          io.select("Transition #{ticket} to:", transitions.keys)
+        ]
+      end
+
+      def transitions
+        @transitions ||= (
+          transitions = {}
+          metadata['transitions'].each do |transition|
+            transitions[transition['to']['name']] = transition['id']
+          end
+          transitions
+        )
+      end
+
+      def metadata
+        @metadata ||= api.get("issue/#{ticket}/transitions")
+      end
+
+    end
   end
 end
