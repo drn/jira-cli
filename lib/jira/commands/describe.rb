@@ -3,10 +3,7 @@ module Jira
 
     desc "describe", "Describes the input ticket"
     def describe(ticket=Jira::Core.ticket)
-      if Jira::Core.ticket?(ticket)
-        output = description(ticket.strip, false, true, true)
-        puts output if !output.strip.empty?
-      end
+      Command::Describe.new(ticket).run
     end
 
     desc "all", "Describes all local branches that match JIRA ticketing syntax"
@@ -81,5 +78,61 @@ module Jira
         return ""
       end
 
+  end
+
+  module Command
+    class Describe < Base
+
+      attr_accessor :ticket
+
+      def initialize(ticket)
+        self.ticket = ticket
+      end
+
+      def run
+        return if json.empty?
+        return if errored?
+        render_table(header, [row])
+      end
+
+      def header
+        [ 'Ticket', 'Assignee', 'Status', 'Summary' ]
+      end
+
+      def row
+        [ ticket, assignee, status, summary ]
+      end
+
+      def errored?
+        return false if errors.empty?
+        puts errors
+        true
+      end
+
+      def errors
+        @errors ||= (json['errorMessages'] || []).join('. ')
+      end
+
+      def assignee
+        (fields['assignee'] || {})['name'] || 'Unassigned'
+      end
+
+      def status
+        (fields['status'] || {})['name'] || 'Unknown'
+      end
+
+      def summary
+        json['fields']['summary']
+      end
+
+      def fields
+        json['fields'] || {}
+      end
+
+      def json
+        @json ||= api.get "issue/#{ticket}"
+      end
+
+    end
   end
 end

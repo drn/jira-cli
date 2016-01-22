@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'faraday', '~> 0.9.0', '>= 0.9.0'
   s.add_dependency 'faraday_middleware', '~> 0.10.0', '>= 0.10.0'
   s.add_dependency 'tty-prompt', '~> 0.3.0', '>= 0.3.0'
+  s.add_dependency 'tty-table', '~> 0.4.0', '>= 0.4.0'
   s.add_dependency 'inifile', '~> 2.0.2', '>= 2.0.2'
 
   s.add_development_dependency 'pry'
