@@ -2,7 +2,6 @@ module Jira
   class CLI < Thor
 
     require 'json'
-    require 'faraday'
     require 'inifile'
     require 'tty-prompt'
     include Thor::Actions
@@ -22,7 +21,7 @@ module Jira
         key = "@api_#{type}"
         klass = self.instance_variable_get(key)
         if klass.nil?
-          klass = Jira::API.new(type)
+          klass = Jira::LegacyAPI.new(type)
           self.instance_variable_set(key, klass)
         end
         return klass

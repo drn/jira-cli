@@ -1,100 +1,68 @@
+require 'faraday'
+require 'faraday_middleware'
+
 module Jira
   class API
 
-    TYPES = [
-      :rest,
-      :agile
-    ].freeze
-
-    ENDPOINTS = {
-      rest:  'rest/api/2',
-      agile: 'rest/greenhopper/latest'
-    }.freeze
-
-    #
-    # Initialize Jira::API
-    #
-    # @param type [Symbol]
-    #
-    def initialize(type)
-      @type = type
-      @client = Faraday.new
-      @client.basic_auth(Jira::Core.username, Jira::Core.password)
-
-      self.define_actions
+    def get(path, options={})
+      response = client.get(path, options[:params] || {}, headers)
+      process(response, options)
     end
 
-    protected
+    def post(path, options={})
+      response = client.post(path, options[:params] || {}, headers)
+      process(response, options)
+    end
 
-      #
-      # Defines the API DELETE, GET, POST, PUT interaction methods
-      #
-      def define_actions
-        #
-        # def method(path, params={})
-        #
-        # Issue an API DELETE, GET, POST, or PUT request and return parse JSON
-        #
-        # @param path [String] API path
-        # @param params [Hash] params to send
-        #
-        # @yield(Hash) yields to a success block
-        #
-        # @return [JSON] parased API response
-        #
-        [:delete, :get, :post, :put].each do |method|
-          self.class.send(:define_method, method) do |path, params=nil, verbose=true, &block|
-            params = params.to_json if !params.nil?
-            response = @client.send(
-              method,
-              self.endpoint(path),
-              params,
-              self.headers
-            )
-            json = response.body.to_s.from_json
-            if self.errorless?(json, verbose)
-              block.call(json)
-            end
-          end
+    def patch(path, options={})
+      response = client.put(path, options[:params] || {}, headers)
+      process(response, options)
+    end
+
+    def delete(path, options={})
+      response = client.delete(path, options[:params] || {}, headers)
+      process(response, options)
+    end
+
+  private
+
+    def process(response, options)
+      json = response.body || {}
+      if response.success?
+        if json['errorMessage'].nil?
+          respond_to(options[:success], json)
+          return
         end
       end
+      respond_to(options[:failure], json)
+    end
 
-      #
-      # If any, outputs all API errors described by the input JSON
-      #
-      # @param json [Hash] API response JSON
-      # @param verbose [Boolean] true if errors should be output
-      #
-      # @return [Boolean] true if no errors exist
-      #
-      def errorless?(json, verbose=true)
-        errors = json['errorMessages']
-        if !errors.nil?
-          puts errors.join('. ') if verbose
-          return false
-        end
-        return true
+    def respond_to(block, json)
+      return if block.nil?
+      case block.arity
+      when 0
+        block.call
+      when 1
+        block.call(json)
       end
+    end
 
-      #
-      # Returns the full JIRA REST API endpoint
-      #
-      # @param path [String] API path
-      #
-      # @return [String] API endpoint
-      #
-      def endpoint(path)
-        "#{Jira::Core.url}/#{ENDPOINTS[@type]}/#{path}"
+    def client
+      @client ||= Faraday.new(endpoint) do |faraday|
+        faraday.request  :basic_auth, Jira::Core.username, Jira::Core.password
+        faraday.request  :json
+        faraday.response :json
+        faraday.adapter  :net_http
       end
+    end
 
-      #
-      # Returns the default API headers
-      #
-      # @return [Hash] API headers
-      #
-      def headers
-        { 'Content-Type' => 'application/json' }
-      end
+    def endpoint
+      "#{Jira::Core.url}/rest/api/2"
+    end
+
+    def headers
+      { 'Content-Type' => 'application/json' }
+    end
 
   end
 end
