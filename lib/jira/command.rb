@@ -14,6 +14,10 @@ module Jira
         @api ||= Jira::API.new
       end
 
+      def sprint_api
+        @sprint_api ||= Jira::SprintAPI.new
+      end
+
       def io
         @io ||= TTY::Prompt.new
       end
