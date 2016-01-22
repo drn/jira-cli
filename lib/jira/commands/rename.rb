@@ -3,17 +3,49 @@ module Jira
 
     desc "rename", "Updates the summary of the input ticket"
     def rename(ticket=Jira::Core.ticket)
-      self.describe(ticket)
-      summary = self.io.ask("New ticket summary?")
-      if !summary.strip.empty?
-        params =  { fields: { summary: summary } }
-        self.api.put("issue/#{ticket}", params) do |json|
-          puts "Successfully updated ticket #{ticket}'s summary."
-        end
-      else
-        puts "No change made to ticket #{ticket}."
-      end
+      Command::Rename.new(ticket).run
     end
 
+  end
+
+  module Command
+    class Rename < Base
+
+      attr_accessor :ticket
+
+      def initialize(ticket)
+        self.ticket = ticket
+      end
+
+      def run
+        return if ticket.empty?
+        return if summary.empty?
+        api.patch "issue/#{ticket}",
+          params:  params,
+          success: on_success,
+          failure: on_failure
+      end
+
+      def params
+        {
+          fields: {
+            summary: summary
+          }
+        }
+      end
+
+      def on_success
+        ->{ puts "Successfully updated ticket #{ticket}'s summary." }
+      end
+
+      def on_failure
+        ->{ puts "No change made to ticket #{ticket}." }
+      end
+
+      def summary
+        @summary ||= io.ask("New summary for ticket #{ticket}:")
+      end
+
+    end
   end
 end
