@@ -15,7 +15,7 @@ module Jira
         return if metadata.empty?
         return if project.empty?
         return if issue_type.empty?
-        # TODO - reimplement subtask support
+        return if assign_parent? && parent.empty?
         return if summary.empty?
         return if description.empty?
 
@@ -35,7 +35,8 @@ module Jira
             project:     { id: project['id'] },
             issuetype:   { id: issue_type['id'] },
             summary:     summary,
-            description: description
+            description: description,
+            parent:      parent.nil? ? nil : { key: parent }
           }
         }
       end
@@ -91,6 +92,16 @@ module Jira
           end
           projects
         )
+      end
+
+      def assign_parent?
+        return false if !issue_type['subtask']
+        return false if io.no?('Set parent of subtask?')
+        true
+      end
+
+      def parent
+        @parent ||= io.ask('Subtask parent:', default: Jira::Core.ticket)
       end
 
       def issue_type
