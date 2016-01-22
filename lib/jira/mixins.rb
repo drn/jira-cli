@@ -3,17 +3,14 @@ module Jira
 
     require 'json'
     require 'faraday'
-    require 'inquirer'
     require 'inifile'
+    require 'tty-prompt'
     include Thor::Actions
 
     protected
 
-      #
-      # @return [Highline] HighLine instance for handling input
-      #
       def io
-        @io ||= Jira::IO.new
+        @io ||= TTY::Prompt.new
       end
 
       #
@@ -38,7 +35,7 @@ module Jira
       # @return index [Integer] asked type of index
       #
       def get_type_of_index(command, description)
-        response = self.io.ask("Index for #{command} to #{description}").strip
+        response = self.io.ask("Index for #{command} to #{description}:").strip
         return -1 if response.empty?
         index = response.to_i
         return -1 if index < 0

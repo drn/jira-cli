@@ -3,7 +3,7 @@ module Jira
 
     desc "log", "Logs work against the input ticket"
     def log(ticket=Jira::Core.ticket)
-      time_spent = self.io.ask("Time spent on ticket #{ticket}")
+      time_spent = self.io.ask("Time spent on ticket #{ticket}:")
       self.api.post("issue/#{ticket}/worklog", { timeSpent: time_spent }) do |json|
         puts "Successfully logged #{time_spent} on ticket #{ticket}."
       end
@@ -11,7 +11,7 @@ module Jira
 
     desc "logd", "Deletes work against the input ticket"
     def logd(ticket=Jira::Core.ticket)
-      logs(ticket) if self.io.agree("List worklogs for ticket #{ticket}")
+      logs(ticket) if self.io.yes?("List worklogs for ticket #{ticket}?")
 
       index = self.get_type_of_index("worklog", "delete")
       puts "No worklog deleted." and return if index < 0
@@ -53,12 +53,12 @@ module Jira
 
     desc "logu", "Updates work against the input ticket"
     def logu(ticket=Jira::Core.ticket)
-      logs(ticket) if self.io.agree("List worklogs for ticket #{ticket}")
+      logs(ticket) if self.io.yes?("List worklogs for ticket #{ticket}?")
 
       index = self.get_type_of_index("worklog", "update")
       puts "No worklog updated." and return if index < 0
 
-      time_spent = self.io.ask("Time spent on #{ticket}").strip
+      time_spent = self.io.ask("Time spent on #{ticket}:").strip
       puts "No worklog updated." and return if time_spent.empty?
 
       self.api.get("issue/#{ticket}/worklog") do |json|

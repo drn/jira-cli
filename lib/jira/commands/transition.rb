@@ -10,8 +10,8 @@ module Jira
         end
         options['Cancel'] = nil
 
-        choice = self.io.choose(
-          "Transition #{Jira::Format.ticket(ticket)} to",
+        choice = self.io.select(
+          "Transition #{Jira::Format.ticket(ticket)} to:",
           options.keys
         )
         if options[choice].nil?

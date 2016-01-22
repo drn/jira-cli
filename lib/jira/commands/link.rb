@@ -9,7 +9,7 @@ module Jira
         break if issue_link_type.nil?
 
         # determine outward ticket
-        outward_ticket = self.io.ask("Outward ticket").strip
+        outward_ticket = self.io.ask("Outward ticket:").strip
         break if !Jira::Core.ticket?(outward_ticket)
 
         # determine api parameters
@@ -56,7 +56,7 @@ module Jira
           issue_link_types[issue_link_type['name']] = data
         end
         issue_link_types['Cancel'] = nil
-        choice = self.io.choose("Select a link type", issue_link_types.keys)
+        choice = self.io.select("Select a link type:", issue_link_types.keys)
         return issue_link_types[choice]
       end
 

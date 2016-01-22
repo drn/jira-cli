@@ -47,7 +47,7 @@ module Jira
     protected
 
       def comment_delete(ticket)
-        comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
+        comments(ticket) if self.io.yes?("List comments for ticket #{ticket}?")
 
         index = self.get_type_of_index("comment", "delete")
         puts "No comment deleted." and return if index < 0
@@ -66,7 +66,7 @@ module Jira
       end
 
       def comment_update(ticket)
-        comments(ticket) if self.io.agree("List comments for ticket #{ticket}")
+        comments(ticket) if self.io.yes?("List comments for ticket #{ticket}?")
 
         index = self.get_type_of_index("comment", "update")
         puts "No comment updated." and return if index < 0
@@ -92,7 +92,7 @@ module Jira
       # @return comment [String] asked comment body
       #
       def get_comment_body(ticket)
-        comment = self.io.ask("Leave a comment for ticket #{ticket}").strip
+        comment = self.io.ask("Leave a comment for ticket #{ticket}:").strip
         temp = comment.gsub(/\@[a-zA-Z]+/,'[~\0]')
         temp = comment if temp.nil?
         temp = temp.gsub('[~@','[~')

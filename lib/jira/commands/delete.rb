@@ -9,7 +9,7 @@ module Jira
         issue_type = json['fields']['issuetype']
         if !issue_type['subtask']
           if !json['fields']['subtasks'].empty? && !force
-            force = self.io.agree("Delete all sub-tasks for ticket #{ticket}")
+            force = self.io.yes?("Delete all sub-tasks for ticket #{ticket}?")
             puts "No ticket deleted." and return if !force
           end
         end
@@ -18,16 +18,16 @@ module Jira
           branches = `git branch --list 2> /dev/null`.split(' ')
           branches.delete("*")
           branches.delete("#{ticket}")
-          create_branch = self.io.agree("Create branch") if branches.count > 1
+          create_branch = self.io.yes?("Create branch?") if branches.count > 1
           if branches.count == 1 or create_branch
             puts "Creating a new branch."
-            new_branch = self.io.ask("Branch").strip
+            new_branch = self.io.ask("Branch?").strip
             new_branch.delete!(" ")
             puts "No ticket deleted." and return if new_branch.empty?
             `git branch #{new_branch} 2> /dev/null`
             branches << new_branch
           end
-          chosen_branch = self.io.choose("Select a branch", branches)
+          chosen_branch = self.io.select("Select a branch:", branches)
           `git checkout #{chosen_branch} 2> /dev/null`
           `git branch -D #{ticket} 2> /dev/null`
           return

@@ -18,8 +18,8 @@ module Jira
         break if !parent.nil? and !Jira::Core.ticket?(parent)
 
         # determine summary and description
-        summary = self.io.ask("Summary")
-        description = self.io.ask("Description")
+        summary = self.io.ask("Summary:")
+        description = self.io.ask("Description:")
 
         # determine api parameters
         params = {
@@ -35,12 +35,10 @@ module Jira
         # post issue to server
         self.api.post("issue", params) do |json|
           ticket = json['key']
-          if self.io.agree("Assign")
-            self.assign(ticket)
-          end
-          if self.io.agree("Create branch")
+          self.assign(ticket) if self.io.yes?("Assign?")
+          if self.io.yes?("Create branch?")
             `git branch #{ticket} 2> /dev/null`
-            if self.io.agree("Check-out branch")
+            if self.io.yes?("Check-out branch?")
               `git checkout #{ticket} 2> /dev/null`
             end
           end
@@ -70,7 +68,7 @@ module Jira
           projects[project['name']] = data
         end
         projects['Cancel'] = nil
-        choice = self.io.choose("Select a project", projects.keys)
+        choice = self.io.select("Select a project:", projects.keys)
         return {} if choice == 'Cancel'
         return projects[choice]
       end
@@ -89,7 +87,7 @@ module Jira
           issue_types[issue_type['name']] = issue_type
         end
         issue_types['Cancel'] = nil
-        choice = self.io.choose("Select an issue type", issue_types.keys)
+        choice = self.io.select("Select an issue type:", issue_types.keys)
         return issue_types[choice]
       end
 
