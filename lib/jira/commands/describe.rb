@@ -50,7 +50,7 @@ module Jira
       end
 
       def summary
-        json['fields']['summary']
+        truncate(json['fields']['summary'], 45)
       end
 
       def fields

@@ -1,79 +1,75 @@
-require 'pry'
-
 module Jira
   class CLI < Thor
 
     desc "all", "Describes all local branches that match JIRA ticketing syntax"
     def all
-      # determine which local branches match JIRA ticket syntax
-      #   TODO - move to Jira::Git
-      tickets = {
-        current: nil,
-        others: []
-      }
-      branches = `git branch`.strip.split("\n")
-      branches.each do |branch|
-        ticket = branch.delete('*').strip
-        if Jira::Core.ticket?(ticket, false)
-          if branch.include?('*')
-            tickets[:current] = ticket
-          else
-            tickets[:others] << ticket
-          end
-        end
-      end
-
-
-      # asynchronously fetch and describe tickets
-      output = ""
-      threads = []
-      if !tickets[:current].nil?
-        threads << Thread.new{ puts description(tickets[:current], true) }
-      end
-      mutex = Mutex.new
-      tickets[:others].each do |ticket|
-        threads << Thread.new do
-          out = description(ticket) + "\n"
-          if !out.strip.empty?
-            mutex.synchronize{ output << out }
-          end
-        end
-      end
-      threads.each{ |thread| thread.join }
-      puts output if !output.empty?
+      Command::All.new.run
     end
 
-  protected
+  end
 
-    #
-    # Returns a formatted description of the input ticket
-    #
-    # @param ticket [String] the ticket to describe
-    # @param star [Boolean] if true, adds a * indicator
-    #
-    # @return [String] formatted summary string
-    #
-    def description(ticket, star=false, verbose=false, describe=false)
-      self.api.get("issue/#{ticket}", nil, verbose) do |json|
-        summary = json['fields']['summary']
-        status = json['fields']['status']['name']
-        assignee = "nil"
-        if json['fields'].has_key?("assignee")
-          if !json['fields']['assignee'].nil?
-            assignee = json['fields']['assignee']['name']
-          end
-        end
-        description = describe ? "\n" + json['fields']['description'].to_s : ""
+  module Command
+    class All < Base
 
-        return Jira::Format.ticket(ticket) +
-          (star ? Jira::Format.star : " ") + "  \t" +
-          ("(" + Jira::Format.user(assignee) + ")").ljust(20) +
-          Jira::Format.status(status).ljust(26) +
-          Jira::Format.summary(summary) +
-          description
+      def run
+        puts 'No tickets' and return if tickets.empty?
+        return if json.empty?
+        return if errored?
+        render_table(header, rows)
       end
-      return ""
-    end
 
+    private
+
+      def header
+        [ 'Ticket', 'Assignee', 'Status', 'Summary' ]
+      end
+
+      def rows
+        json['issues'].map do |issue|
+          [
+            issue['key'],
+            issue['fields']['assignee']['name'],
+            issue['fields']['status']['name'],
+            truncate(issue['fields']['summary'], 45)
+          ]
+        end
+      end
+
+      def errored?
+        return false if errors.empty?
+        puts errors
+        true
+      end
+
+      def errors
+        @errors ||= (json['errorMessages'] || []).join('. ')
+      end
+
+      def json
+        @json ||= api.get "search", params: params
+      end
+
+      def params
+        {
+          jql: "key in (#{tickets.join(',')})"
+        }
+      end
+
+      def tickets
+        @tickets ||= (
+          tickets = []
+          branches.each do |branch|
+            ticket = branch.delete('*').strip
+            tickets << ticket if Jira::Core.ticket?(ticket, false)
+          end
+          tickets
+        )
+      end
+
+      def branches
+        `git branch`.strip.split("\n")
+      end
+
+    end
   end
 end

@@ -26,6 +26,11 @@ module Jira
         puts TTY::Table.new(header, rows).render(:ascii, padding: [0,1])
       end
 
+      def truncate(string, limit=80)
+        return string if string.length < limit
+        string[0..limit-3] + '...'
+      end
+
     end
   end
 end
