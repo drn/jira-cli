@@ -1,5 +1,3 @@
-require 'pry'
-
 module Jira
   class CLI < Thor
 

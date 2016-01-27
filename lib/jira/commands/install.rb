@@ -1,3 +1,5 @@
+require_relative '../command'
+
 module Jira
   class CLI < Thor
 
