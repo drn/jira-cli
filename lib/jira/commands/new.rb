@@ -30,13 +30,13 @@ module Jira
       attr_accessor :ticket
 
       def params
-         {
+        {
           fields: {
             project:     { id: project['id'] },
             issuetype:   { id: issue_type['id'] },
             summary:     summary,
             description: description,
-            parent:      parent.nil? ? nil : { key: parent }
+            parent:      @parent.nil? ? {} : { key: @parent }
           }
         }
       end
