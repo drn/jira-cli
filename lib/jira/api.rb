@@ -28,14 +28,13 @@ module Jira
 
     def process(response, options)
       json = response.body || {}
-      if response.success?
-        if json['errorMessage'].nil?
-          respond_to(options[:success], json)
-          return json
-        end
+      if response.success? && json['errorMessages'].nil?
+        respond_to(options[:success], json)
+      else
+        puts json['errorMessages'].join('. ') unless json['errorMessages'].nil?
+        respond_to(options[:failure], json)
       end
-      respond_to(options[:failure], json)
-      return json
+      json
     end
 
     def respond_to(block, json)
