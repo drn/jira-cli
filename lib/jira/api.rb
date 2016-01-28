@@ -49,7 +49,8 @@ module Jira
 
     def client
       @client ||= Faraday.new(endpoint) do |faraday|
-        faraday.request  :basic_auth, Jira::Core.username, Jira::Core.password
+        faraday.request  :basic_auth, Jira::Core.username, Jira::Core.password unless Jira::Core.password.nil?
+        faraday.request  :token_auth, Jira::Core.token unless Jira::Core.token.nil?
         faraday.request  :json
         faraday.response :json
         faraday.adapter  :net_http

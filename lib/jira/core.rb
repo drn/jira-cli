@@ -33,6 +33,13 @@ module Jira
       end
 
       #
+      # @return [String] JIRA token
+      #
+      def token
+        @token ||= ENV['JIRA_TOKEN'] || self.read(self.cli_path)[:global]['token']
+      end
+
+      #
       # @return [String] default ticket is the current branch
       #
       def ticket
