@@ -15,28 +15,28 @@ module Jira
       # @return [String] JIRA project endpoint
       #
       def url
-        @url ||= ENV['JIRA_URL'] || self.read(self.cli_path)[:global]['url']
+        @url ||= ENV['JIRA_URL'] || config[:global]['url']
       end
 
       #
       # @return [String] JIRA username
       #
       def username
-        @username ||= ENV['JIRA_USERNAME'] || self.read(self.cli_path)[:global]['username']
+        @username ||= ENV['JIRA_USERNAME'] || config[:global]['username']
       end
 
       #
       # @return [String] JIRA password
       #
       def password
-        @password ||= ENV['JIRA_PASSWORD'] || self.read(self.cli_path)[:global]['password']
+        @password ||= ENV['JIRA_PASSWORD'] || config[:global]['password']
       end
 
       #
       # @return [String] default ticket is the current branch
       #
       def ticket
-        `git rev-parse --abbrev-ref HEAD`.strip
+        `git rev-parse --abbrev-ref HEAD 2>/dev/null`.strip
       end
 
       #
@@ -63,40 +63,24 @@ module Jira
       # @return [String] path to .jira-cli file
       #
       def cli_path
-        @cli_path ||= self.root_path + "/.jira-cli"
+        @cli_path ||= root_path + "/.jira-cli"
       end
 
-    protected
+    private
 
       def root_path
         @root_path ||= (
           root_path = `git rev-parse --show-toplevel 2>/dev/null`.strip
-          raise GitException.new if root_path.empty?
+          raise GitException if root_path.empty?
           root_path
         )
       end
 
-      ### Core Actions
-
-      #
-      # Validates the location and reads the contents of the input path
-      #
-      # @param path [String] path of file to read
-      #
-      # @return [Object] IniFile object of the file at the input path
-      #
-      def read(path)
-        self.validate_path!(path)
-        IniFile.load(path, { :comment => '#', :encoding => 'UTF-8' })
-      end
-
-      #
-      # Aborts command if no file at the input path exists.
-      #
-      # @param path [String] path to validate
-      #
-      def validate_path!(path)
-        raise InstallationException.new if !File.exists?(path)
+      def config
+        @config ||= (
+          raise InstallationException unless File.exists?(cli_path)
+          IniFile.load(cli_path, comment: '#', encoding: 'UTF-8')
+        )
       end
 
     end
