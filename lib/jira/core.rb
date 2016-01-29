@@ -3,15 +3,6 @@ module Jira
     class << self
 
       #
-      # Memoizes url, username, and password
-      #
-      def setup
-        self.url
-      end
-
-      ### Virtual Attributes
-
-      #
       # @return [String] JIRA project endpoint
       #
       def url

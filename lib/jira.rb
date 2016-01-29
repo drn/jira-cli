@@ -9,19 +9,5 @@ Dir.glob(
 module Jira
   class CLI < Thor
 
-    def initialize(args=[], options={}, config={})
-      super
-      self.suppress{ Jira::Core.setup }
-      self.suppress{ self.api }
-    end
-
-    protected
-
-      def suppress
-        yield
-      rescue GitException
-      rescue InstallationException
-      end
-
   end
 end
