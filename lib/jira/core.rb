@@ -66,16 +66,15 @@ module Jira
         @cli_path ||= self.root_path + "/.jira-cli"
       end
 
-      #
-      # @return [String] path of root git directory
-      #
-      def root_path
-        return @root_path if !@root_path.nil?
-        raise GitException.new if !system('git rev-parse 2> /dev/null')
-        @root_path ||= `git rev-parse --show-toplevel`.strip
-      end
-
     protected
+
+      def root_path
+        @root_path ||= (
+          root_path = `git rev-parse --show-toplevel 2>/dev/null`.strip
+          raise GitException.new if root_path.empty?
+          root_path
+        )
+      end
 
       ### Core Actions
 
