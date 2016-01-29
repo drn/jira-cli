@@ -15,7 +15,6 @@ module Jira
         io.say('Please enter your JIRA information.')
         inifile[:global] = params
         inifile.write
-        Jira::Core.send(:discard_memoized)
       end
 
     private

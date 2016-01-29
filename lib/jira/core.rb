@@ -75,39 +75,30 @@ module Jira
         @root_path ||= `git rev-parse --show-toplevel`.strip
       end
 
-      protected
+    protected
 
-        ### Core Actions
+      ### Core Actions
 
-        #
-        # Discards memozied class variables
-        #
-        def discard_memoized
-          @url = nil
-          @username = nil
-          @password = nil
-        end
+      #
+      # Validates the location and reads the contents of the input path
+      #
+      # @param path [String] path of file to read
+      #
+      # @return [Object] IniFile object of the file at the input path
+      #
+      def read(path)
+        self.validate_path!(path)
+        IniFile.load(path, { :comment => '#', :encoding => 'UTF-8' })
+      end
 
-        #
-        # Validates the location and reads the contents of the input path
-        #
-        # @param path [String] path of file to read
-        #
-        # @return [Object] IniFile object of the file at the input path
-        #
-        def read(path)
-          self.validate_path!(path)
-          IniFile.load(path, { :comment => '#', :encoding => 'UTF-8' })
-        end
-
-        #
-        # Aborts command if no file at the input path exists.
-        #
-        # @param path [String] path to validate
-        #
-        def validate_path!(path)
-          raise InstallationException.new if !File.exists?(path)
-        end
+      #
+      # Aborts command if no file at the input path exists.
+      #
+      # @param path [String] path to validate
+      #
+      def validate_path!(path)
+        raise InstallationException.new if !File.exists?(path)
+      end
 
     end
   end
