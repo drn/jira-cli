@@ -1,3 +1,5 @@
+require_relative '../command'
+
 module Jira
   class CLI < Thor
 
@@ -20,11 +22,20 @@ module Jira
     private
 
       def params
-        {
+        args = {
           url:      url,
           username: username,
-          password: password
         }
+        response = io.select("Select an authentication type:", ["basic", "token"])
+        case response
+        when "basic"
+          args[:password] = password
+        when "token"
+          args[:token] = token
+        else
+          raise InstallationException
+        end
+        args
       end
 
       def url
@@ -37,6 +48,10 @@ module Jira
 
       def password
         io.mask("JIRA password:")
+      end
+
+      def token
+        io.ask("JIRA token:")
       end
 
       def inifile

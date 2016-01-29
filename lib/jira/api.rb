@@ -28,14 +28,13 @@ module Jira
 
     def process(response, options)
       json = response.body || {}
-      if response.success?
-        if json['errorMessage'].nil?
-          respond_to(options[:success], json)
-          return json
-        end
+      if response.success? && json['errorMessages'].nil?
+        respond_to(options[:success], json)
+      else
+        puts json['errorMessages'].join('. ') unless json['errorMessages'].nil?
+        respond_to(options[:failure], json)
       end
-      respond_to(options[:failure], json)
-      return json
+      json
     end
 
     def respond_to(block, json)
@@ -50,7 +49,8 @@ module Jira
 
     def client
       @client ||= Faraday.new(endpoint) do |faraday|
-        faraday.request  :basic_auth, Jira::Core.username, Jira::Core.password
+        faraday.request  :basic_auth, Jira::Core.username, Jira::Core.password unless Jira::Core.password.nil?
+        faraday.request  :token_auth, Jira::Core.token unless Jira::Core.token.nil?
         faraday.request  :json
         faraday.response :json
         faraday.adapter  :net_http

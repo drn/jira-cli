@@ -1,3 +1,5 @@
+require_relative '../command'
+
 module Jira
   class CLI < Thor
 
@@ -14,6 +16,8 @@ module Jira
       def run
         return if metadata.empty?
         return if project.empty?
+        return if project_metadata.empty?
+        components # Select components if any after a project
         return if issue_type.empty?
         return if assign_parent? && parent.empty?
         return if summary.empty?
@@ -30,13 +34,14 @@ module Jira
       attr_accessor :ticket
 
       def params
-         {
+        {
           fields: {
             project:     { id: project['id'] },
             issuetype:   { id: issue_type['id'] },
             summary:     summary,
             description: description,
-            parent:      parent.nil? ? nil : { key: parent }
+            parent:      @parent.nil? ? {} : { key: @parent },
+            components:  @components.nil? ? [] : @components
           }
         }
       end
@@ -94,8 +99,25 @@ module Jira
         )
       end
 
+      def project_metadata
+        id = project['id']
+        @project_metadata ||= api.get("project/#{id}")
+      end
+
+      def components
+        @components ||= (
+          components = {}
+          project_metadata['components'].each do |component|
+            components[component['name']] = {
+               'id'    => component['id']
+            }
+          end
+          io.multi_select("Select component(s):", components) unless components.empty?
+        )
+      end
+
       def assign_parent?
-        return false if !issue_type['subtask']
+        return false unless issue_type['subtask']
         return false if io.no?('Set parent of subtask?')
         true
       end
