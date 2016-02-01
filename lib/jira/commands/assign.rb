@@ -26,6 +26,8 @@ module Jira
           failure: on_failure
       end
 
+    private
+
       def on_success
         -> do
           puts "Ticket #{ticket} assigned to #{name}."
