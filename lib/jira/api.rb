@@ -24,7 +24,7 @@ module Jira
       process(response, options)
     end
 
-  private
+  protected
 
     def process(response, options)
       json = response.body || {}
@@ -62,7 +62,15 @@ module Jira
     end
 
     def headers
-      { 'Content-Type' => 'application/json' }
+      { 'Content-Type' => 'application/json' }.merge(cookies)
+    end
+
+    def cookies
+      cookie = Jira::Core.cookie
+      unless cookie.empty?
+        return { 'cookie' => "#{cookie[:name]}=#{cookie[:value]}" }
+      end
+      {}
     end
 
   end

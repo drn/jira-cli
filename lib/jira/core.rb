@@ -27,7 +27,15 @@ module Jira
       # @return [String] JIRA token
       #
       def token
-        @token ||= ENV['JIRA_TOKEN'] || self.read(self.cli_path)[:global]['token']
+        @token ||= ENV['JIRA_TOKEN'] || config[:global]['token']
+      end
+
+      #
+      # @return [Hash] JIRA cookie
+      #
+      def cookie
+        return {} if config[:cookie].nil? || config[:cookie].empty?
+        { name: config[:cookie]['name'], value: config[:cookie]['value'] }
       end
 
       #

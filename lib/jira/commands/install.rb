@@ -15,35 +15,50 @@ module Jira
 
       def run
         io.say('Please enter your JIRA information.')
-        inifile[:global] = params
+        inifile[:global] = base_params
+        inifile.write # Do this now because cookie authentication uses api calls
+
+        inifile.delete_section("cookie") if inifile.has_section?("cookie")
+        case authentication
+        when "basic"
+          inifile[:global][:password] = password
+        when "token"
+          inifile[:global][:token] = token
+        when "cookie"
+          response = cookie
+          inifile[:cookie] = {}
+          inifile[:cookie][:name] = response['name']
+          inifile[:cookie][:value] = response['value']
+        end
         inifile.write
       end
 
     private
 
-      def params
-        args = {
+      def base_params
+        {
           url:      url,
           username: username,
         }
-        response = io.select("Select an authentication type:", ["basic", "token"])
-        case response
-        when "basic"
-          args[:password] = password
-        when "token"
-          args[:token] = token
-        else
-          raise InstallationException
-        end
-        args
+      end
+
+      def session_params
+        {
+          username: username,
+          password: password
+        }
+      end
+
+      def authentication
+        @authentication ||= io.select("Select an authentication type:", ["basic", "cookie", "token"])
       end
 
       def url
-        io.ask("JIRA URL:")
+        @url ||= io.ask("JIRA URL:")
       end
 
       def username
-        io.ask("JIRA username:")
+        @username ||= io.ask("JIRA username:")
       end
 
       def password
@@ -52,6 +67,12 @@ module Jira
 
       def token
         io.ask("JIRA token:")
+      end
+
+      def cookie
+        response = auth_api.post('session', params: session_params)
+        return {} unless response['errorMessages'].nil?
+        response['session']
       end
 
       def inifile
