@@ -28,8 +28,8 @@ module Jira
         json['issues'].map do |issue|
           [
             issue['key'],
-            issue['fields']['assignee']['name'],
-            issue['fields']['status']['name'],
+            issue['fields']['assignee']['name'] || 'Unassigned',
+            issue['fields']['status']['name'] || 'Unknown',
             truncate(issue['fields']['summary'], 45)
           ]
         end
