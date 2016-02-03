@@ -19,6 +19,7 @@ describe Jira::Command::Assign do
   let(:assignee) { 'assignee' }
 
   before do
+    allow(Jira::Core).to receive(:config) { {} }
     allow(Jira::Core).to receive(:url) { 'https://sample.atlassian.net/' }
     allow(Faraday).to receive(:new) { api }
     allow(command).to receive(:io) { io }
