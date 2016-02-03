@@ -14,6 +14,10 @@ module Jira
         @api ||= Jira::API.new
       end
 
+      def auth_api
+        @auth_api ||= Jira::AuthAPI.new
+      end
+
       def sprint_api
         @sprint_api ||= Jira::SprintAPI.new
       end
