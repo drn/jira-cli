@@ -10,6 +10,7 @@ require 'faraday_middleware'
 require 'jira/exceptions'
 require 'jira/constants'
 require 'jira/command'
+require 'jira/format'
 
 module Jira
   class CLI < Thor
