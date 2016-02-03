@@ -1,10 +1,15 @@
-# dependencies
+# external dependencies
 require 'thor'
-# core logic and commands
-Dir.glob(
-  File.dirname(File.absolute_path(__FILE__)) + '/jira/**/*.rb',
-  &method(:require)
-)
+require 'tty-table'
+require 'inifile'
+require 'tty-prompt'
+require 'json'
+require 'faraday'
+require 'faraday_middleware'
+# internal dependencies
+require 'jira/exceptions'
+require 'jira/constants'
+require 'jira/command'
 
 module Jira
   class CLI < Thor

@@ -1,4 +1,10 @@
-require 'tty-table'
+# internal dependencies
+require 'jira/api'
+require 'jira/sprint_api'
+require 'jira/auth_api'
+require 'jira/legacy_api'
+require 'jira/core'
+require 'jira/mixins'
 
 module Jira
   module Command
@@ -38,3 +44,7 @@ module Jira
     end
   end
 end
+
+# load commands
+commands_directory = File.join(File.dirname(__FILE__), 'commands', '*.rb')
+Dir[commands_directory].each { |file| require file }

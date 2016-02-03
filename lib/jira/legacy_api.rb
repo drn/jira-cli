@@ -1,5 +1,3 @@
-require 'faraday'
-
 module Jira
   class LegacyAPI
 

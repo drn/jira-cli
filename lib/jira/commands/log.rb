@@ -1,7 +1,7 @@
-require_relative 'log/add'
-require_relative 'log/delete'
-require_relative 'log/list'
-require_relative 'log/update'
+require 'jira/commands/log/add'
+require 'jira/commands/log/delete'
+require 'jira/commands/log/list'
+require 'jira/commands/log/update'
 
 module Jira
   class CLI < Thor

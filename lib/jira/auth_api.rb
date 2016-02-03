@@ -1,8 +1,3 @@
-require 'faraday'
-require 'faraday_middleware'
-
-require_relative './api'
-
 module Jira
   class AuthAPI < API
 

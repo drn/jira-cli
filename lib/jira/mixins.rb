@@ -1,9 +1,6 @@
 module Jira
   class CLI < Thor
 
-    require 'json'
-    require 'inifile'
-    require 'tty-prompt'
     include Thor::Actions
 
     protected
