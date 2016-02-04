@@ -6,7 +6,7 @@ require 'jira/commands/log/update'
 module Jira
   class CLI < Thor
 
-    desc 'log', 'log subcommands'
+    desc 'log <command>', 'Commands for logging operations in JIRA'
     subcommand 'log', Log
 
   end
