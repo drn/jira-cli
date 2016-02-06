@@ -8,7 +8,7 @@ module Jira
 
   end
 
-  module  Command
+  module Command
     class Update < Base
 
       attr_accessor :ticket
@@ -37,7 +37,7 @@ module Jira
 
       def logs?
         if json.empty?
-          puts "Ticket #{ticket} has no work logged"
+          puts "Ticket #{ticket} has no work logged."
           return false
         end
         true
@@ -48,11 +48,11 @@ module Jira
       end
 
       def on_success
-        ->{ puts "Successfully updated #{to_update['timeSpent']}" }
+        ->{ puts "Successfully updated #{to_update['timeSpent']}." }
       end
 
       def on_failure
-        ->{ puts "No logged work updated" }
+        ->{ puts "No logged work updated." }
       end
 
       def to_update
@@ -72,7 +72,7 @@ module Jira
       end
 
       def description_for(log)
-        author = log['author']['displayName']
+        author = log['updateAuthor']['displayName']
         updated_at = Jira::Format.time(Time.parse(log['updated']))
         time_spent = log['timeSpent']
         "#{author} @ #{updated_at}: #{time_spent}"

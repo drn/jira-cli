@@ -19,7 +19,7 @@ module Jira
 
       def run
         if logs.empty?
-          puts "Ticket #{ticket} has no work logged"
+          puts "Ticket #{ticket} has no work logged."
           return
         end
         render_table(header, rows)
@@ -47,7 +47,7 @@ module Jira
       end
 
       def author
-        log['author']['displayName']
+        log['updateAuthor']['displayName']
       end
 
       def updated_at

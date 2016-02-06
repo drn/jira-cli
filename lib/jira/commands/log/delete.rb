@@ -28,7 +28,7 @@ module Jira
 
       def logs?
         if json.empty?
-          puts "Ticket #{ticket} has no work logged"
+          puts "Ticket #{ticket} has no work logged."
           return false
         end
         true
@@ -39,11 +39,11 @@ module Jira
       end
 
       def on_success
-        ->{ puts "Successfully deleted #{to_delete['timeSpent']}" }
+        ->{ puts "Successfully deleted #{to_delete['timeSpent']}." }
       end
 
       def on_failure
-        ->{ puts "No logged work deleted" }
+        ->{ puts "No logged work deleted." }
       end
 
       def to_delete
@@ -63,7 +63,7 @@ module Jira
       end
 
       def description_for(log)
-        author = log['author']['displayName']
+        author = log['updateAuthor']['displayName']
         updated_at = Jira::Format.time(Time.parse(log['updated']))
         time_spent = log['timeSpent']
         "#{author} @ #{updated_at}: #{time_spent}"
