@@ -24,6 +24,14 @@ module Jira
         @auth_api ||= Jira::AuthAPI.new
       end
 
+      def body
+        @body ||= (
+          comment = io.ask("Leave a comment for ticket #{ticket}:").strip
+          comment = comment.gsub(/\@[a-zA-Z]+/,'[~\0]') || comment
+          comment.gsub('[~@','[~') || comment
+        )
+      end
+
       def sprint_api
         @sprint_api ||= Jira::SprintAPI.new
       end
