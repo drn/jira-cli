@@ -1,42 +1,48 @@
 module Jira
   class CLI < Thor
 
-    desc "tickets", "List the tickets of the input username"
-    def tickets(username=Jira::Core.username)
-      Command::Tickets.new(username).run
+    desc "tickets [jql]", "List the tickets of the input jql"
+    def tickets(jql="assignee=#{Jira::Core.username}")
+      Command::Tickets.new(jql).run
     end
+
   end
 
   module Command
     class Tickets < Base
 
-      attr_accessor :username
+      attr_accessor :jql
 
-      def initialize(username)
-        self.username = username
+      def initialize(jql)
+        self.jql = jql
       end
 
       def run
-        return if username.empty?
+        return if jql.empty?
         return if metadata.empty?
+        puts "There are no tickets for jql=#{jql}." and return if rows.empty?
+        render_table(header, rows)
+      end
 
-        issues = metadata['issues']
-        if !issues.nil? and issues.count > 0
-          issues.each do |issue|
-            ticket = issue['key']
+    private
 
-            printf "[%2d]", issues.index(issue)
-            puts "  #{Jira::Format.ticket(ticket)}"
-          end
-        else
-          puts "There are no tickets for username #{username}."
+      def header
+        [ 'Ticket', 'Assignee', 'Status', 'Summary']
+      end
+
+      def rows
+        metadata['issues'].map do |issue|
+          [
+            issue['key'],
+            issue['fields']['assignee']['name'] || 'Unassigned',
+            issue['fields']['status']['name'] || 'Unknown',
+            truncate(issue['fields']['summary'], 45)
+          ]
         end
       end
 
-      private
-
       def metadata
-        @metadata ||= api.get("search?jql=assignee=#{username}")
+        @metadata ||= api.get("search?jql=#{jql}")
       end
 
     end

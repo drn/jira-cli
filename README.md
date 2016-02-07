@@ -23,7 +23,7 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
     jira new                # Creates a new ticket in JIRA and checks out the git branch
     jira rename             # Updates the summary of the input ticket
     jira sprint             # Lists sprint info
-    jira tickets            # List the tickets of the input username
+    jira tickets [jql]      # List the tickets of the input username (or jql)
     jira transition         # Transitions the input ticket to the next state
     jira version            # Displays the version
     jira vote <command>     # Commands for voting operations in JIRA
