@@ -19,7 +19,6 @@ module Jira
         return if issue_type.empty?
         return if assign_parent? && parent.empty?
         return if summary.empty?
-        return if description.empty?
 
         api.post 'issue',
           params: params,
@@ -141,11 +140,11 @@ module Jira
       end
 
       def summary
-        @summary ||= io.ask("Summary:")
+        @summary ||= io.ask("Summary:", default: '')
       end
 
       def description
-        @description ||= io.ask("Description:")
+        @description ||= io.ask("Description:", default: '')
       end
 
     end
