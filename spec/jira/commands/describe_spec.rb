@@ -18,21 +18,6 @@ describe Jira::Command::Describe do
       end
     end
 
-    context 'errored' do
-      let(:json) {
-        {
-          'errorMessages' => [
-            error
-          ]
-        }
-      }
-      let(:error) { 'Issue Does Not Exist' }
-
-      it 'outputs error message' do
-        expect { command.run }.to output(/#{error}/).to_stdout
-      end
-    end
-
     context 'successful' do
       let(:json) {
         {
