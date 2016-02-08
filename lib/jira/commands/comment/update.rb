@@ -74,7 +74,7 @@ module Jira
         def description_for(comment)
           author = comment['updateAuthor']['displayName']
           updated_at = Jira::Format.time(Time.parse(comment['updated']))
-          body = comment['body'].gsub("\r\n|\r|\n", ";")
+          body = comment['body'].split.join(" ")
           truncate("#{author} @ #{updated_at}: #{body}", 160)
         end
 

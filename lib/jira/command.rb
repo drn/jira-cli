@@ -28,7 +28,7 @@ module Jira
       # TODO: Move this to relevant subcommand Base
       def body
         @body ||= (
-          comment = io.ask("Leave a comment for ticket #{ticket}:").strip
+          comment = io.ask("Leave a comment for ticket #{ticket}:", default: 'Empty comment').strip
           comment = comment.gsub(/\@[a-zA-Z]+/, '[~\0]') || comment
           comment.gsub('[~@', '[~') || comment
         )
