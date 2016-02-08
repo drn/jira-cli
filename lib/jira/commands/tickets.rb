@@ -20,6 +20,8 @@ module Jira
       def run
         return if jql.empty?
         return if metadata.empty?
+        return unless metadata['errorMessages'].nil?
+
         puts "There are no tickets for jql=#{jql}." and return if rows.empty?
         render_table(header, rows)
       end
