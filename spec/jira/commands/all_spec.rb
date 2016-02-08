@@ -38,21 +38,6 @@ describe Jira::Command::All do
         end
       end
 
-      context 'errors' do
-        let(:json) {
-          {
-            'errorMessages' => [
-              error
-            ]
-          }
-        }
-        let(:error) { 'Invalid query' }
-
-        it 'outputs errors' do
-          expect { command.run }.to output(/#{error}/).to_stdout
-        end
-      end
-
       context 'no errors' do
         let(:json) {
           {
