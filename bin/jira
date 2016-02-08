@@ -3,8 +3,8 @@
 require 'jira'
 begin
   Jira::CLI.start
-rescue Faraday::Error
-  puts "JIRA failed connect, you may need to rerun 'jira install'"
+rescue Faraday::Error, UnauthorizedException
+  puts "JIRA failed connect, you may need to rerun 'jira install'" unless Jira::CLI.new.try_install_cookie
 rescue GitException
   puts "JIRA commands can only be run within a git repository."
 rescue InstallationException

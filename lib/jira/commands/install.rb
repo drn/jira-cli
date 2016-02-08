@@ -6,6 +6,18 @@ module Jira
       Command::Install.new.run
     end
 
+    no_commands do
+      def try_install_cookie
+        return false if Jira::Core.cookie.empty?
+        puts "  ... cookie expired, renewing your cookie"
+        Command::Install.new.run_rescue_cookie
+        puts "Cookie renewed, please retry your last command."
+        return true
+      rescue Interrupt, StandardError
+        false
+      end
+    end
+
   end
 
   module Command
@@ -23,12 +35,21 @@ module Jira
         when "token"
           inifile[:global][:token] = token
         when "cookie"
-          response = cookie
+          response = cookie(session_params)
           inifile[:cookie] = {}
           inifile[:cookie][:name] = response['name']
           inifile[:cookie][:value] = response['value']
         end
         inifile.write
+      end
+
+      def run_rescue_cookie
+        response = cookie(rescue_cookie_params)
+        config = Jira::Core.config
+        config[:cookie] = {}
+        config[:cookie][:name] = response['name']
+        config[:cookie][:value] = response['value']
+        config.write
       end
 
     private
@@ -37,6 +58,13 @@ module Jira
         {
           url:      url,
           username: username
+        }
+      end
+
+      def rescue_cookie_params
+        {
+          username: Jira::Core.username,
+          password: password
         }
       end
 
@@ -70,8 +98,8 @@ module Jira
         io.ask("JIRA token:")
       end
 
-      def cookie
-        response = auth_api.post('session', params: session_params)
+      def cookie(params)
+        response = auth_api.post('session', params: params)
         return {} unless response['errorMessages'].nil?
         response['session']
       end
