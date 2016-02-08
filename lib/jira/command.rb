@@ -1,6 +1,7 @@
-# internal dependencies
+# external dependencies
 require 'time'
 
+# internal dependencies
 require 'jira/api'
 require 'jira/sprint_api'
 require 'jira/auth_api'
