@@ -19,6 +19,8 @@ module Jira
         end
 
         def run
+          return if comments.nil?
+
           if comments.empty?
             puts "Ticket #{ticket} has no comments."
             return
@@ -56,7 +58,8 @@ module Jira
         end
 
         def body
-          comment['body']
+          body = comment['body'].gsub("\r\n|\r|\n", ";")
+          truncate(body, 45)
         end
 
         def comments
