@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = 'darren@thanx.com'
   s.homepage    = 'https://github.com/drn/jira-cli'
   s.summary     = 'JIRA CLI'
-  s.description = 'CLI used to manage JIRA workflows leveraging git'
+  s.description = 'Ruby CLI managing git-based JIRA workflows'
   s.license     = 'MIT'
 
   s.files       = Dir.glob("{bin,lib}/**/*") + %w(README.md)
