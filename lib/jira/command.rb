@@ -2,7 +2,6 @@
 require 'jira/api'
 require 'jira/sprint_api'
 require 'jira/auth_api'
-require 'jira/legacy_api'
 require 'jira/core'
 require 'jira/mixins'
 
@@ -22,6 +21,14 @@ module Jira
 
       def auth_api
         @auth_api ||= Jira::AuthAPI.new
+      end
+
+      def body
+        @body ||= (
+          comment = io.ask("Leave a comment for ticket #{ticket}:").strip
+          comment = comment.gsub(/\@[a-zA-Z]+/,'[~\0]') || comment
+          comment.gsub('[~@','[~') || comment
+        )
       end
 
       def sprint_api

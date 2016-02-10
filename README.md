@@ -10,34 +10,29 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
 
 ### Available Commands
 
-    jira all             # Describes all local branches that match JIRA ticketing syntax
-    jira assign          # Assign a ticket to a user
-    jira attachments     # View ticket attachments
-    jira comment         # Add a comment to the input ticket
-    jira commentd        # Delete a comment to the input ticket
-    jira comments        # Lists the comments of the input ticket
-    jira commentu        # Update a comment to the input ticket
-    jira commit          # Commits uncommitted work with the ticket name and summary.
-    jira delete          # Deletes a ticket in JIRA and the git branch
-    jira describe        # Describes the input ticket
-    jira install         # Guides the user through JIRA installation
-    jira link            # Creates a link between two tickets in JIRA
-    jira log             # Logs work against the input ticket
-    jira logd            # Deletes work against the input ticket
-    jira logs            # Lists work against the input ticket
-    jira logu            # Updates work against the input ticket
-    jira new             # Creates a new ticket in JIRA and checks out the git branch
-    jira rename          # Updates the summary of the input ticket
-    jira tickets         # List the tickets of the input username
-    jira transition      # Transitions the input ticket to the next state
-    jira unvote          # Unvote against the input ticket
-    jira unwatch         # Unwatch against the input ticket
-    jira version         # Displays the version
-    jira vote            # Vote against the input ticket
-    jira votes           # List the votes of the input ticket
-    jira watch           # Watch against the input ticket
-    jira watchers        # List the watchers of the input ticket
-    jira help [COMMAND]  # Describe available commands or one specific command
+    jira all                # Describes all local branches that match JIRA ticketing syntax
+    jira assign             # Assign a ticket to a user
+    jira attachments        # View ticket attachments
+    jira comment <command>  # Commands for comment operations in JIRA
+    jira commit             # Commits uncommitted work with the ticket name and summary.
+    jira delete             # Deletes a ticket in JIRA and the git branch
+    jira describe           # Describes the input ticket
+    jira help [COMMAND]     # Describe available commands or one specific command
+    jira install            # Guides the user through JIRA CLI installation
+    jira link               # Creates a link between two tickets in JIRA
+    jira log <command>      # Commands for logging operations in JIRA
+    jira new                # Creates a new ticket in JIRA and checks out the git branch
+    jira rename             # Updates the summary of the input ticket
+    jira sprint             # Lists sprint info
+    jira tickets            # List the tickets of the input username
+    jira transition         # Transitions the input ticket to the next state
+    jira unvote             # Unvote against the input ticket
+    jira unwatch            # Unwatch against the input ticket
+    jira version            # Displays the version
+    jira vote               # Vote against the input ticket
+    jira votes              # List the votes of the input ticket
+    jira watch              # Watch against the input ticket
+    jira watchers           # List the watchers of the input ticket
 
 ### Gem Installation
 

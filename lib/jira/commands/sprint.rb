@@ -55,8 +55,10 @@ module Jira
       end
 
       def rapid_view
+        keys = rapid_views.keys
+        return '' if keys.empty?
         @rapid_view ||= rapid_views[
-          io.select("Select a rapid view:", rapid_views.keys)
+          io.select("Select a rapid view:", keys)
         ]
       end
 
