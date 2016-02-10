@@ -25,13 +25,9 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
     jira sprint             # Lists sprint info
     jira tickets            # List the tickets of the input username
     jira transition         # Transitions the input ticket to the next state
-    jira unvote             # Unvote against the input ticket
-    jira unwatch            # Unwatch against the input ticket
     jira version            # Displays the version
-    jira vote               # Vote against the input ticket
-    jira votes              # List the votes of the input ticket
-    jira watch              # Watch against the input ticket
-    jira watchers           # List the watchers of the input ticket
+    jira vote <command>     # Commands for voting operations in JIRA
+    jira watch <command>    # Commands for watching tickets in JIRA
 
 ### Gem Installation
 
