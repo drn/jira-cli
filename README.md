@@ -14,7 +14,6 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
     jira assign             # Assign a ticket to a user
     jira attachments        # View ticket attachments
     jira comment <command>  # Commands for comment operations in JIRA
-    jira commit             # Commits uncommitted work with the ticket name and summary.
     jira delete             # Deletes a ticket in JIRA and the git branch
     jira describe           # Describes the input ticket
     jira help [COMMAND]     # Describe available commands or one specific command

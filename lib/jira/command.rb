@@ -3,7 +3,6 @@ require 'jira/api'
 require 'jira/sprint_api'
 require 'jira/auth_api'
 require 'jira/core'
-require 'jira/mixins'
 
 module Jira
   module Command
