@@ -75,7 +75,7 @@ module Jira
           author = comment['updateAuthor']['displayName']
           updated_at = Jira::Format.time(Time.parse(comment['updated']))
           body = comment['body'].gsub("\r\n|\r|\n", ";")
-          "#{author} @ #{updated_at}: #{body}"
+          truncate("#{author} @ #{updated_at}: #{body}", 160)
         end
 
         def json
