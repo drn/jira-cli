@@ -45,7 +45,10 @@ module Jira
         end
 
         def on_success
-          ->{ puts "Successfully updated comment originally from #{to_update['updateAuthor']['displayName']}." }
+          ->{
+            puts "Successfully updated comment originally from"\
+            " #{to_update['updateAuthor']['displayName']}."
+          }
         end
 
         def on_failure

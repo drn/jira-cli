@@ -48,7 +48,10 @@ module Jira
       end
 
       def authentication
-        @authentication ||= io.select("Select an authentication type:", ["basic", "cookie", "token"])
+        @authentication ||= io.select(
+          "Select an authentication type:",
+          ["basic", "cookie", "token"]
+        )
       end
 
       def url

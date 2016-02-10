@@ -67,7 +67,10 @@ module Jira
       end
 
       def on_success
-        ->{ puts "Successfully linked ticket #{ticket} to ticket #{outward_ticket}." }
+        ->{
+          puts "Successfully linked ticket #{ticket} to"\
+          " ticket #{outward_ticket}."
+        }
       end
 
       def on_failure

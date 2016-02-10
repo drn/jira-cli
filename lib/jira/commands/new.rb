@@ -106,11 +106,11 @@ module Jira
         @components ||= (
           components = {}
           project_metadata['components'].each do |component|
-            components[component['name']] = {
-               'id'    => component['id']
-            }
+            components[component['name']] = { 'id' => component['id'] }
           end
-          io.multi_select("Select component(s):", components) unless components.empty?
+          unless components.empty?
+            io.multi_select("Select component(s):", components)
+          end
         )
       end
 
