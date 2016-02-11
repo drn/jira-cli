@@ -36,7 +36,7 @@ module Jira
       def base_params
         {
           url:      url,
-          username: username,
+          username: username
         }
       end
 

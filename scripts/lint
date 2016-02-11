@@ -1,0 +1,4 @@
+#!/bin/bash
+
+bundle exec rubocop
+bundle exec rubocop --format offenses

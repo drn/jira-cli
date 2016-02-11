@@ -33,7 +33,7 @@ module Jira
         end
       end
 
-      private
+    private
 
       def params
         {
@@ -82,8 +82,7 @@ module Jira
       end
 
       def invalid_ticket?
-        return true unless Jira::Core.ticket?(outward_ticket)
-        return false
+        !Jira::Core.ticket?(outward_ticket)
       end
 
       def metadata

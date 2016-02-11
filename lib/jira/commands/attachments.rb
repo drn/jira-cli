@@ -35,7 +35,7 @@ module Jira
         end
       end
 
-      private
+    private
 
       def metadata
         @metadata ||= api.get("issue/#{ticket}")

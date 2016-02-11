@@ -46,7 +46,7 @@ module Jira
             puts "There are no votes on ticket #{ticket}."
             return true
           end
-          return false
+          false
         end
 
         def voters

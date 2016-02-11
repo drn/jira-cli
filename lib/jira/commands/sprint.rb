@@ -28,7 +28,7 @@ module Jira
           puts "The #{rapid_view['name']} board has no sprints."
           return true
         end
-        return false
+        false
       end
 
       def info

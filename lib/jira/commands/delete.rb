@@ -30,7 +30,7 @@ module Jira
           failure: on_failure
       end
 
-      private
+    private
 
       def on_success
         -> do
@@ -46,7 +46,7 @@ module Jira
       def branches
         branches = `git branch --list 2> /dev/null`.split(' ')
         branches.delete("*")
-        branches.delete("#{ticket}")
+        branches.delete(ticket.to_s)
         branches
       end
 

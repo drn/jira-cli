@@ -22,11 +22,12 @@ module Jira
         @auth_api ||= Jira::AuthAPI.new
       end
 
+      # TODO: Move this to relevant subcommand Base
       def body
         @body ||= (
           comment = io.ask("Leave a comment for ticket #{ticket}:").strip
-          comment = comment.gsub(/\@[a-zA-Z]+/,'[~\0]') || comment
-          comment.gsub('[~@','[~') || comment
+          comment = comment.gsub(/\@[a-zA-Z]+/, '[~\0]') || comment
+          comment.gsub('[~@', '[~') || comment
         )
       end
 
@@ -39,7 +40,7 @@ module Jira
       end
 
       def render_table(header, rows)
-        puts TTY::Table.new(header, rows).render(:ascii, padding: [0,1])
+        puts TTY::Table.new(header, rows).render(:ascii, padding: [0, 1])
       end
 
       def truncate(string, limit=80)

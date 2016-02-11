@@ -23,6 +23,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'tty-prompt', '~> 0.3.0', '>= 0.3.0'
   s.add_dependency 'tty-table', '~> 0.4.0', '>= 0.4.0'
   s.add_dependency 'inifile', '~> 2.0.2', '>= 2.0.2'
-
-  s.add_development_dependency 'pry'
 end

@@ -1,0 +1,92 @@
+
+# AllCops:
+#   Exclude:
+#     - 'jira-cli.gemspec'
+
+# Style
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent
+Style/SignalException:
+  EnforcedStyle: only_raise
+Style/AlignParameters:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/BlockDelimiters:
+  Enabled: false
+Style/MultilineBlockLayout:
+  Enabled: false
+Style/WordArray:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: false
+Style/BracesAroundHashParameters:
+  Enabled: false
+Style/SpaceInsideBrackets:
+  Enabled: false
+Style/SpaceAroundOperators:
+  Enabled: false
+Style/SpaceBeforeBlockBraces:
+  Enabled: false
+Style/SpaceInsideBlockBraces:
+  Enabled: false
+Style/SpaceInsideHashLiteralBraces:
+  Enabled: false
+Style/HashSyntax:
+  Enabled: false
+Style/MultilineMethodCallIndentation:
+  Enabled: false
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/RescueModifier:
+  Enabled: false
+Style/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+Style/ConditionalAssignment:
+  Enabled: false
+Style/NestedParenthesizedCalls:
+  Enabled: false
+Style/RedundantSelf:
+  Enabled: false
+Style/DoubleNegation:
+  Enabled: false
+Style/AndOr:
+  Enabled: false
+Style/RegexpLiteral:
+  Enabled: false
+Style/Lambda:
+  Enabled: false
+Style/RedundantParentheses:
+  Enabled: false
+Style/SpecialGlobalVars:
+  Enabled: false
+
+# Metrics
+Metrics/LineLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Lint/UnusedMethodArgument:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+
+# Lint
+Lint/ImplicitStringConcatenation:
+  Enabled: false
+Lint/HandleExceptions:
+  Enabled: false

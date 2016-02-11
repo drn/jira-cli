@@ -60,7 +60,7 @@ module Jira
         if verbose
           puts "#{Jira::Format.ticket(ticket)} is not a valid JIRA ticket."
         end
-        return false
+        false
       end
 
       ### Relevant Paths
@@ -84,7 +84,7 @@ module Jira
 
       def config
         @config ||= (
-          raise InstallationException unless File.exists?(cli_path)
+          raise InstallationException unless File.exist?(cli_path)
           IniFile.load(cli_path, comment: '#', encoding: 'UTF-8')
         )
       end

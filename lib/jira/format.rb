@@ -38,7 +38,7 @@ module Jira
 
       def time(time)
         "#{Thor::Shell::Color::BLUE}"\
-        "#{time.strftime("%l:%M%P on %b %d, %Y").strip}"\
+        "#{time.strftime('%l:%M%P on %b %d, %Y').strip}"\
         "#{Thor::Shell::Color::CLEAR}"
       end
 
@@ -59,7 +59,7 @@ module Jira
           ")"\
           "#{Thor::Shell::Color::CLEAR}"
         )
-        return comment
+        comment
       end
 
       def wrap(text)

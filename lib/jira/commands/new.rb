@@ -73,7 +73,7 @@ module Jira
       end
 
       def metadata
-        # TODO - {} on 200 but jira error
+        # TODO: {} on 200 but jira error
         @metadata ||= api.get('issue/createmeta')
       end
 
