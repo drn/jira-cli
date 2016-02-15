@@ -12,9 +12,12 @@ module Jira
     class All < Base
 
       def run
-        puts 'No tickets' and return if tickets.empty?
+        if tickets.empty?
+          puts 'No tickets'
+          return
+        end
         return if json.empty?
-        return if errored?
+        return unless errors.empty?
         render_table(header, rows)
       end
 
@@ -33,12 +36,6 @@ module Jira
             truncate(issue['fields']['summary'], 45)
           ]
         end
-      end
-
-      def errored?
-        return false if errors.empty?
-        puts errors
-        true
       end
 
       def errors

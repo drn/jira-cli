@@ -72,6 +72,13 @@ module Jira
         @cli_path ||= root_path + "/.jira-cli"
       end
 
+      def config
+        @config ||= (
+          raise InstallationException unless File.exist?(cli_path)
+          IniFile.load(cli_path, comment: '#', encoding: 'UTF-8')
+        )
+      end
+
     private
 
       def root_path
@@ -79,13 +86,6 @@ module Jira
           root_path = `git rev-parse --show-toplevel 2>/dev/null`.strip
           raise GitException if root_path.empty?
           root_path
-        )
-      end
-
-      def config
-        @config ||= (
-          raise InstallationException unless File.exist?(cli_path)
-          IniFile.load(cli_path, comment: '#', encoding: 'UTF-8')
         )
       end
 

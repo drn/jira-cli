@@ -20,6 +20,7 @@ module Jira
       def run
         return if ticket.empty?
         return if metadata.empty?
+        return unless metadata['errorMessages'].nil?
         return if transition.empty?
         api.post "issue/#{ticket}/transitions",
           params:  params,

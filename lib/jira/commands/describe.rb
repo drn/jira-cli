@@ -19,7 +19,7 @@ module Jira
 
       def run
         return if json.empty?
-        return if errored?
+        return unless errors.empty?
         render_table(header, [row])
       end
 
@@ -29,12 +29,6 @@ module Jira
 
       def row
         [ ticket, assignee, status, summary ]
-      end
-
-      def errored?
-        return false if errors.empty?
-        puts errors
-        true
       end
 
       def errors

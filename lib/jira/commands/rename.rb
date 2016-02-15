@@ -43,7 +43,7 @@ module Jira
       end
 
       def summary
-        @summary ||= io.ask("New summary for ticket #{ticket}:")
+        @summary ||= io.ask("New summary for ticket #{ticket}:", default: '')
       end
 
     end

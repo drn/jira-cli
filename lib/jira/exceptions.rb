@@ -1,2 +1,3 @@
-class InstallationException < Exception; end
-class GitException < Exception; end
+class InstallationException < StandardError; end
+class GitException < StandardError; end
+class UnauthorizedException < StandardError; end

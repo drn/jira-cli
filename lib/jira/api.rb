@@ -24,6 +24,7 @@ module Jira
   protected
 
     def process(response, options)
+      raise UnauthorizedException if response.status == 401
       json = response.body || {}
       if response.success? && json['errorMessages'].nil?
         respond_to(options[:success], json)

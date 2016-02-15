@@ -2,24 +2,24 @@ module Jira
   class SprintAPI < API
 
     def sprint(rapid_view_id, sprint_id)
-      response = client.get(
-        'rapid/charts/sprintreport',
+      params = {
         rapidViewId: rapid_view_id,
         sprintId:    sprint_id
-      )
-      return response.body if response.success?
+      }
+      json = get('rapid/charts/sprintreport', params: params) || {}
+      return json if json['errorMessages'].nil?
       {}
     end
 
     def sprints(rapid_view_id)
-      response = client.get("sprintquery/#{rapid_view_id}")
-      return response.body if response.success?
+      json = get("sprintquery/#{rapid_view_id}")
+      return json if json['errorMessages'].nil?
       {}
     end
 
     def rapid_views
-      response = client.get("rapidview")
-      return response.body['views'] if response.success?
+      json = get("rapidview")
+      return json['views'] if json['errorMessages'].nil?
       []
     end
 
