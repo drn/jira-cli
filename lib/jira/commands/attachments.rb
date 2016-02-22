@@ -31,7 +31,7 @@ module Jira
             puts "#{Jira::Format.user(name)} #{url}"
           end
         else
-          puts "No attachments found"
+          puts "No attachments found for ticket #{ticket}."
         end
       end
 
