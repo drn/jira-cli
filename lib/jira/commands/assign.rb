@@ -2,8 +2,9 @@ module Jira
   class CLI < Thor
 
     desc "assign", "Assign a ticket to a user"
+    method_option :assignee, aliases: "-a", type: :string, default: nil, lazy_default: "auto", banner: "ASSIGNEE"
     def assign(ticket=Jira::Core.ticket)
-      Command::Assign.new(ticket).run
+      Command::Assign.new(ticket, options).run
     end
 
   end
@@ -11,10 +12,11 @@ module Jira
   module Command
     class Assign < Base
 
-      attr_accessor :ticket
+      attr_accessor :ticket, :options
 
-      def initialize(ticket)
+      def initialize(ticket, options={})
         self.ticket = ticket
+        self.options = options
       end
 
       def run
@@ -53,7 +55,7 @@ module Jira
 
       def assignee
         @assignee ||= (
-          assignee = io.ask('Assignee?', default: 'auto')
+          assignee = options['assignee'] || io.ask('Assignee?', default: 'auto')
           assignee == 'auto' ? '-1' : assignee
         )
       end
