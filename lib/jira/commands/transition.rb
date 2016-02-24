@@ -2,8 +2,9 @@ module Jira
   class CLI < Thor
 
     desc "transition", "Transitions the input ticket to the next state"
+    method_option :transition, aliases: "-t", type: :string, default: nil, lazy_default: "", banner: "TRANSITION"
     def transition(ticket=Jira::Core.ticket)
-      Command::Transition.new(ticket).run
+      Command::Transition.new(ticket, options).run
     end
 
   end
@@ -11,17 +12,18 @@ module Jira
   module Command
     class Transition < Base
 
-      attr_accessor :ticket
+      attr_accessor :ticket, :options
 
-      def initialize(ticket)
+      def initialize(ticket, options)
         self.ticket = ticket
+        self.options = options
       end
 
       def run
         return if ticket.empty?
         return if metadata.empty?
         return unless metadata['errorMessages'].nil?
-        return if transition.empty?
+        return if transition.nil? || transition.empty?
         api.post "issue/#{ticket}/transitions",
           params:  params,
           success: on_success,
@@ -48,7 +50,7 @@ module Jira
 
       def transition
         @transition ||= transitions[
-          io.select("Transition #{ticket} to:", transitions.keys)
+          options['transition'] || io.select("Transition #{ticket} to:", transitions.keys)
         ]
       end
 
