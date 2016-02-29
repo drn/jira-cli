@@ -13,6 +13,7 @@ Ruby gem CLI tool used to manage JIRA workflows leveraging git
     jira all                # Describes all local branches that match JIRA ticketing syntax
     jira assign             # Assign a ticket to a user
     jira attachments        # View ticket attachments
+    jira checkout <ticket>  # Checks out a ticket from JIRA in the git branch
     jira comment <command>  # Commands for comment operations in JIRA
     jira delete             # Deletes a ticket in JIRA and the git branch
     jira describe           # Describes the input ticket
