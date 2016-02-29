@@ -2,8 +2,9 @@ module Jira
   class CLI < Thor
 
     desc "rename", "Updates the summary of the input ticket"
+    method_option :summary, aliases: "-s", type: :string, default: nil, lazy_default: "", banner: "SUMMARY"
     def rename(ticket=Jira::Core.ticket)
-      Command::Rename.new(ticket).run
+      Command::Rename.new(ticket, options).run
     end
 
   end
@@ -11,10 +12,11 @@ module Jira
   module Command
     class Rename < Base
 
-      attr_accessor :ticket
+      attr_accessor :ticket, :options
 
-      def initialize(ticket)
+      def initialize(ticket, options)
         self.ticket = ticket
+        self.options = options
       end
 
       def run
@@ -43,7 +45,7 @@ module Jira
       end
 
       def summary
-        @summary ||= io.ask("New summary for ticket #{ticket}:", default: '')
+        @summary ||= options['summary'] || io.ask("New summary for ticket #{ticket}:", default: '')
       end
 
     end

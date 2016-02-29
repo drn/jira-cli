@@ -2,8 +2,9 @@ module Jira
   class Log < Thor
 
     desc 'add', 'Logs work against the input ticket'
+    method_option :time, aliases: "-t", type: :string, default: nil, lazy_default: "", banner: "TIME"
     def add(ticket=Jira::Core.ticket)
-      Command::Log::Add.new(ticket).run
+      Command::Log::Add.new(ticket, options).run
     end
 
   end
@@ -12,10 +13,11 @@ module Jira
     module Log
       class Add < Base
 
-        attr_accessor :ticket
+        attr_accessor :ticket, :options
 
-        def initialize(ticket)
+        def initialize(ticket, options)
           self.ticket = ticket
+          self.options = options
         end
 
         def run
@@ -33,7 +35,7 @@ module Jira
         end
 
         def time_spent
-          @time_spent ||= io.ask("Time spent on ticket #{ticket}:")
+          @time_spent ||= options['time'] || io.ask("Time spent on ticket #{ticket}:")
         end
 
         def on_success

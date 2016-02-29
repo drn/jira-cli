@@ -2,8 +2,15 @@ module Jira
   class CLI < Thor
 
     desc "new", "Creates a new ticket in JIRA and checks out the git branch"
+    method_option :project, aliases: "-p", type: :string, default: nil, banner: "PROJECT"
+    method_option :components, aliases: "-c", type: :array, default: nil, lazy_default: [], banner: "COMPONENTS"
+    method_option :issuetype, aliases: "-i", type: :string, default: nil, banner: "ISSUETYPE"
+    method_option :parent, type: :string, default: nil, lazy_default: "", banner: "PARENT"
+    method_option :summary, aliases: "-s", type: :string, default: nil, banner: "SUMMARY"
+    method_option :description, aliases: "-d", type: :string, default: nil, lazy_default: "", banner: "DESCRIPTION"
+    method_option :assignee, aliases: "-a", type: :string, default: nil, lazy_default: "auto", banner: "ASSIGNEE"
     def new
-      Command::New.new.run
+      Command::New.new(options).run
     end
 
   end
@@ -11,12 +18,18 @@ module Jira
   module Command
     class New < Base
 
+      attr_accessor :options
+
+      def initialize(options)
+        self.options = options
+      end
+
       def run
         return if metadata.empty?
-        return if project.empty?
+        return if project.nil? || project.empty?
         return if project_metadata.empty?
         components # Select components if any after a project
-        return if issue_type.empty?
+        return if issue_type.nil? || issue_type.empty?
         return if assign_parent? && parent.empty?
         return if summary.empty?
 
@@ -47,13 +60,13 @@ module Jira
         ->(json) do
           self.ticket = json['key']
           io.say("Ticket #{ticket} created.")
-          assign?
-          create_branch? && checkout_branch?
+          assign? if options.empty? || !options['assignee'].nil?
+          create_branch? && checkout_branch? if options.empty?
         end
       end
 
       def assign?
-        Command::Assign.new(ticket).run if io.yes?('Assign?')
+        Command::Assign.new(ticket, options).run if !options['assignee'].nil? || io.yes?('Assign?')
       end
 
       def create_branch?
@@ -79,7 +92,7 @@ module Jira
 
       def project
         @project ||= projects[
-          io.select("Select a project:", projects.keys)
+          options['project'] || io.select("Select a project:", projects.keys)
         ]
       end
 
@@ -108,24 +121,30 @@ module Jira
             components[component['name']] = { 'id' => component['id'] }
           end
           unless components.empty?
-            io.multi_select("Select component(s):", components)
+            if options['components'].nil?
+              components = io.multi_select("Select component(s):", components)
+            else
+              components.select! { |k| options['components'].include?(k) }
+              components = components.values
+            end
           end
+          components.to_a
         )
       end
 
       def assign_parent?
         return false unless issue_type['subtask']
-        return false if io.no?('Set parent of subtask?')
+        return false if options['parent'].nil? && io.no?('Set parent of subtask?')
         true
       end
 
       def parent
-        @parent ||= io.ask('Subtask parent:', default: Jira::Core.ticket)
+        @parent ||= options['parent'] || io.ask('Subtask parent:', default: Jira::Core.ticket)
       end
 
       def issue_type
         @issue_type ||= issue_types[
-          io.select("Select an issue type:", issue_types.keys)
+            options['issuetype'] || io.select("Select an issue type:", issue_types.keys)
         ]
       end
 
@@ -140,11 +159,14 @@ module Jira
       end
 
       def summary
-        @summary ||= io.ask("Summary:", default: '')
+        @summary ||= options['summary'] || io.ask("Summary:", default: '')
       end
 
       def description
-        @description ||= io.ask("Description:", default: '')
+        @description ||= (
+          description = options['description'] || (io.ask("Description:", default: '') if options['summary'].nil?)
+          description ||= ""
+        )
       end
 
     end
