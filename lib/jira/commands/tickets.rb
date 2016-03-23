@@ -22,7 +22,10 @@ module Jira
         return if metadata.empty?
         return unless metadata['errorMessages'].nil?
 
-        puts "There are no tickets for jql=#{jql}." and return if rows.empty?
+        if rows.empty?
+          puts "There are no tickets for jql=#{jql}."
+          return
+        end
         render_table(header, rows)
       end
 
@@ -36,9 +39,9 @@ module Jira
         metadata['issues'].map do |issue|
           [
             issue['key'],
-            issue['fields']['assignee']['name'] || 'Unassigned',
-            issue['fields']['status']['name'] || 'Unknown',
-            truncate(issue['fields']['summary'], 45)
+            (issue['fields']['assignee']['name'] unless issue['fields']['assignee'].nil?) || 'Unassigned',
+            (issue['fields']['status']['name'] unless issue['fields']['status'].nil?) || 'Unknown',
+            truncate(issue['fields']['summary'] || '', 45)
           ]
         end
       end
