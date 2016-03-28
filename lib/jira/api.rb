@@ -25,23 +25,24 @@ module Jira
 
     def process(response, options)
       raise UnauthorizedException if response.status == 401
-      json = response.body || {}
+      body = response.body || {}
+      json = (body if body.class == Hash) || {}
       if response.success? && json['errorMessages'].nil?
-        respond_to(options[:success], json)
+        respond_to(options[:success], body)
       else
         puts json['errorMessages'].join('. ') unless json['errorMessages'].nil?
-        respond_to(options[:failure], json)
+        respond_to(options[:failure], body)
       end
-      json
+      body
     end
 
-    def respond_to(block, json)
+    def respond_to(block, body)
       return if block.nil?
       case block.arity
       when 0
         block.call
       when 1
-        block.call(json)
+        block.call(body)
       end
     end
 
