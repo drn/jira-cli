@@ -6,7 +6,7 @@ module Jira
       Command::Install.new.run
     end
 
-    no_commands do
+    no_tasks do
       def try_install_cookie
         return false if Jira::Core.cookie.empty?
         puts "  ... cookie expired, renewing your cookie"
