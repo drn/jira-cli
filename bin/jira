@@ -1,10 +1,22 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require 'jira'
 begin
   Jira::CLI.start
+  File.delete(Jira::Core.rescue_cookie_path) if File.exist?(Jira::Core.rescue_cookie_path)
 rescue Faraday::Error, UnauthorizedException
-  puts "JIRA failed connect, you may need to rerun 'jira install'" unless Jira::CLI.new.try_install_cookie
+  if Jira::CLI.new.try_install_cookie
+    if File.read(Jira::Core.rescue_cookie_path).count('r') < 3
+      puts "Re-running: jira #{ARGV.join(' ')}"
+      Process.waitpid(
+        Process.fork do
+          Process.exec("jira #{ARGV.join(' ')}")
+        end
+      )
+      exit
+    end
+  end
+  puts "JIRA failed connect, you may need to rerun 'jira install'"
 rescue GitException
   puts "JIRA commands can only be run within a git repository."
 rescue InstallationException

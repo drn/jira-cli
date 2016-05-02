@@ -11,7 +11,11 @@ module Jira
         return false if Jira::Core.cookie.empty?
         puts "  ... cookie expired, renewing your cookie"
         Command::Install.new.run_rescue_cookie
-        puts "Cookie renewed, please retry your last command."
+        puts "Cookie renewed, updating .jira-rescue-cookie"
+        File.open(Jira::Core.rescue_cookie_path, "a") do |f|
+          f << "r"
+        end
+        puts "  ... updated .jira-rescue-cookie"
         return true
       rescue Interrupt, StandardError
         false
