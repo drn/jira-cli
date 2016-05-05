@@ -72,6 +72,13 @@ module Jira
         @cli_path ||= root_path + "/.jira-cli"
       end
 
+      #
+      # @return [String] path to .jira-rescue-cookie file
+      #
+      def rescue_cookie_path
+        @rescue_cookie_path ||= root_path + "/.jira-rescue-cookie"
+      end
+
       def config
         @config ||= (
           raise InstallationException unless File.exist?(cli_path)
