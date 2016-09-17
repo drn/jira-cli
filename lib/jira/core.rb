@@ -69,30 +69,20 @@ module Jira
       # @return [String] path to .jira-cli file
       #
       def cli_path
-        @cli_path ||= root_path + "/.jira-cli"
+        @cli_path ||= "#{Dir.home}/.jira-cli"
       end
 
       #
       # @return [String] path to .jira-rescue-cookie file
       #
       def rescue_cookie_path
-        @rescue_cookie_path ||= root_path + "/.jira-rescue-cookie"
+        @rescue_cookie_path ||= "#{Dir.home}/.jira-rescue-cookie"
       end
 
       def config
         @config ||= (
           raise InstallationException unless File.exist?(cli_path)
           IniFile.load(cli_path, comment: '#', encoding: 'UTF-8')
-        )
-      end
-
-    private
-
-      def root_path
-        @root_path ||= (
-          root_path = `git rev-parse --show-toplevel 2>/dev/null`.strip
-          raise GitException if root_path.empty?
-          root_path
         )
       end
 
