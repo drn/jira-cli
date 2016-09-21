@@ -2,7 +2,7 @@ module Jira
   class CLI < Thor
 
     desc "attachments", "View ticket attachments"
-    def attachments(ticket=Jira::Core.ticket)
+    def attachments(ticket)
       Command::Attachments.new(ticket).run
     end
 

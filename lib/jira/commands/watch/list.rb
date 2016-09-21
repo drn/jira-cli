@@ -2,7 +2,7 @@ module Jira
   class Watch < Thor
 
     desc 'list', 'Lists the watchers of the input ticket'
-    def list(ticket=Jira::Core.ticket)
+    def list(ticket)
       Command::Watch::List.new(ticket).run
     end
 

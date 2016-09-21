@@ -4,7 +4,7 @@ module Jira
     desc "transition", "Transitions the input ticket to the next state"
     method_option :transition, aliases: "-t", type: :string, default: nil, lazy_default: "", banner: "TRANSITION"
     method_option :resolution, aliases: "-r", type: :string, default: nil, lazy_default: "", banner: "RESOLUTION"
-    def transition(ticket=Jira::Core.ticket)
+    def transition(ticket)
       Command::Transition.new(ticket, options).run
     end
 

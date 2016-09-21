@@ -2,7 +2,7 @@ module Jira
   class Vote < Thor
 
     desc 'add', 'Vote for the input ticket'
-    def add(ticket=Jira::Core.ticket)
+    def add(ticket)
       Command::Vote::Add.new(ticket).run
     end
 

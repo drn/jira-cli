@@ -3,7 +3,7 @@ module Jira
 
     desc "assign", "Assign a ticket to a user"
     method_option :assignee, aliases: "-a", type: :string, default: nil, lazy_default: "auto", banner: "ASSIGNEE"
-    def assign(ticket=Jira::Core.ticket)
+    def assign(ticket)
       Command::Assign.new(ticket, options).run
     end
 

@@ -2,7 +2,7 @@ module Jira
   class Watch < Thor
 
     desc 'add', 'Watch the input ticket'
-    def add(ticket=Jira::Core.ticket)
+    def add(ticket)
       Command::Watch::Add.new(ticket).run
     end
 

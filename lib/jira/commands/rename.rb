@@ -3,7 +3,7 @@ module Jira
 
     desc "rename", "Updates the summary of the input ticket"
     method_option :summary, aliases: "-s", type: :string, default: nil, lazy_default: "", banner: "SUMMARY"
-    def rename(ticket=Jira::Core.ticket)
+    def rename(ticket)
       Command::Rename.new(ticket, options).run
     end
 

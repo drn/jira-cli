@@ -3,7 +3,7 @@ module Jira
 
     desc 'add', 'Add a comment to the input ticket'
     method_option :text, aliases: "-t", type: :string, default: nil, lazy_default: "", banner: "TEXT"
-    def add(ticket=Jira::Core.ticket)
+    def add(ticket)
       Command::Comment::Add.new(ticket, options).run
     end
 

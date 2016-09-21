@@ -126,7 +126,7 @@ module Jira
       end
 
       def parent
-        @parent ||= options['parent'] || io.ask('Subtask parent:', default: Jira::Core.ticket)
+        @parent ||= options['parent'] || io.ask('Subtask parent:')
       end
 
       def issue_type

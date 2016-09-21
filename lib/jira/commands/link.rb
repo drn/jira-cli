@@ -2,7 +2,7 @@ module Jira
   class CLI < Thor
 
     desc "link", "Creates a link between two tickets in JIRA"
-    def link(ticket=Jira::Core.ticket)
+    def link(ticket)
       Command::Link.new(ticket).run
     end
 
