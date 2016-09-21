@@ -39,23 +39,6 @@ Manually:
     cd jira-cli
     ./scripts/install
 
-### Project Installation
-
-In order to use this tool, you'll need to run the installation script in the
-git repository that you're managing via JIRA.
-
-    cd path/to/jira/repo
-    jira install
-
-Note: Authentication files are expected to drastically change. Currently, they
-are completely unencrypted. Use are your own risk... (see disclaimer above)
-
-### Disclaimer
-
-This tool is in very early alpha and its architecture and commands
-are expected to change drastically. Please only use this tool for testing
-purposes.
-
 ### License
 
 (The MIT License)
