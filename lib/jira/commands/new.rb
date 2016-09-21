@@ -1,7 +1,7 @@
 module Jira
   class CLI < Thor
 
-    desc "new", "Creates a new ticket in JIRA and checks out the git branch"
+    desc 'new', 'Creates a new ticket'
     method_option :project, aliases: "-p", type: :string, default: nil, banner: "PROJECT"
     method_option :components, aliases: "-c", type: :array, default: nil, lazy_default: [], banner: "COMPONENTS"
     method_option :issuetype, aliases: "-i", type: :string, default: nil, banner: "ISSUETYPE"
@@ -61,24 +61,11 @@ module Jira
           self.ticket = json['key']
           io.say("Ticket #{ticket} created.")
           assign? if options.empty? || !options['assignee'].nil?
-          create_branch? && checkout_branch? if options.empty?
         end
       end
 
       def assign?
         Command::Assign.new(ticket, options).run if !options['assignee'].nil? || io.yes?('Assign?')
-      end
-
-      def create_branch?
-        return false if io.no?("Create branch?")
-        `git branch #{ticket} 2> /dev/null`
-        true
-      end
-
-      def checkout_branch?
-        return false if io.no?("Check-out branch?")
-        `git checkout #{ticket} 2> /dev/null`
-        true
       end
 
       def on_failure
