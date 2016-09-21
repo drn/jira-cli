@@ -1,7 +1,7 @@
 module Jira
   class CLI < Thor
 
-    desc "delete", "Deletes a ticket"
+    desc "delete <ticket>", "Deletes a ticket"
     method_option :force, type: :boolean, default: false
     def delete(ticket)
       Command::Delete.new(ticket, options[:force]).run

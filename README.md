@@ -9,23 +9,23 @@ Control JIRA from your terminal
 
 ### Available Commands
 
-    jira assign             # Assign a ticket to a user
-    jira attachments        # View ticket attachments
-    jira comment <command>  # Commands for comment operations in JIRA
-    jira delete             # Deletes a ticket
-    jira describe           # Describes the input ticket
-    jira help [COMMAND]     # Describe available commands or one specific command
-    jira install            # Guides the user through JIRA CLI installation
-    jira link               # Creates a link between two tickets in JIRA
-    jira log <command>      # Commands for logging operations in JIRA
-    jira new                # Creates a new ticket in JIRA
-    jira rename             # Updates the summary of the input ticket
-    jira sprint             # Lists sprint info
-    jira tickets [jql]      # List the tickets of the input username (or jql)
-    jira transition         # Transitions the input ticket to the next state
-    jira version            # Displays the version
-    jira vote <command>     # Commands for voting operations in JIRA
-    jira watch <command>    # Commands for watching tickets in JIRA
+    jira assign <ticket>       # Assign a ticket to a user
+    jira attachments <ticket>  # View ticket attachments
+    jira comment <command>     # Commands for comment operations in JIRA
+    jira delete <ticket>       # Deletes a ticket
+    jira describe <ticket>     # Describes the input ticket
+    jira help [COMMAND]        # Describe available commands or one specific command
+    jira install               # Guides the user through JIRA CLI installation
+    jira link <ticket>         # Creates a link between two tickets in JIRA
+    jira log <command>         # Commands for logging operations in JIRA
+    jira new                   # Creates a new ticket
+    jira rename <ticket>       # Updates the summary of the input ticket
+    jira sprint                # Lists sprint info
+    jira tickets [jql]         # List the tickets of the input jql
+    jira transition <ticket>   # Transitions the input ticket to the next state
+    jira version               # Displays the version
+    jira vote <command>        # Commands for voting operations in JIRA
+    jira watch <command>       # Commands for watching tickets in JIRA
 
 ### Gem Installation
 

@@ -1,7 +1,7 @@
 module Jira
   class CLI < Thor
 
-    desc "transition", "Transitions the input ticket to the next state"
+    desc "transition <ticket>", "Transitions the input ticket to the next state"
     method_option :transition, aliases: "-t", type: :string, default: nil, lazy_default: "", banner: "TRANSITION"
     method_option :resolution, aliases: "-r", type: :string, default: nil, lazy_default: "", banner: "RESOLUTION"
     def transition(ticket)

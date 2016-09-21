@@ -1,7 +1,7 @@
 module Jira
   class CLI < Thor
 
-    desc "describe", "Describes the input ticket"
+    desc "describe <ticket>", "Describes the input ticket"
     def describe(ticket)
       Command::Describe.new(ticket).run
     end

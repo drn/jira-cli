@@ -1,7 +1,7 @@
 module Jira
   class CLI < Thor
 
-    desc "rename", "Updates the summary of the input ticket"
+    desc "rename <ticket>", "Updates the summary of the input ticket"
     method_option :summary, aliases: "-s", type: :string, default: nil, lazy_default: "", banner: "SUMMARY"
     def rename(ticket)
       Command::Rename.new(ticket, options).run
