@@ -1,27 +1,24 @@
 # JIRA CLI [![Gem Version](https://badge.fury.io/rb/jira-cli.png)](http://badge.fury.io/rb/jira-cli)
 
-Ruby gem CLI tool used to manage JIRA workflows leveraging git
+Control JIRA from your terminal
 
 * * *
 
-[![Circle CI](https://circleci.com/gh/drn/jira-cli.svg?style=svg)](https://circleci.com/gh/drn/jira-cli)
-[![Dependency Status](https://gemnasium.com/darrenli/jira-cli.png)](https://gemnasium.com/darrenli/jira-cli)
-[![Code Climate](https://codeclimate.com/github/darrenli/jira-cli.png)](https://codeclimate.com/github/darrenli/jira-cli)
+[![Circle CI](https://circleci.com/gh/ruby-jira/jira-cli.svg?style=svg)](https://circleci.com/gh/ruby-jira/jira-cli)
+[![Code Climate](https://codeclimate.com/github/ruby-jira/jira-cli.png)](https://codeclimate.com/github/ruby-jira/jira-cli)
 
 ### Available Commands
 
-    jira all                # Describes all local branches that match JIRA ticketing syntax
     jira assign             # Assign a ticket to a user
     jira attachments        # View ticket attachments
-    jira checkout <ticket>  # Checks out a ticket from JIRA in the git branch
     jira comment <command>  # Commands for comment operations in JIRA
-    jira delete             # Deletes a ticket in JIRA and the git branch
+    jira delete             # Deletes a ticket
     jira describe           # Describes the input ticket
     jira help [COMMAND]     # Describe available commands or one specific command
     jira install            # Guides the user through JIRA CLI installation
     jira link               # Creates a link between two tickets in JIRA
     jira log <command>      # Commands for logging operations in JIRA
-    jira new                # Creates a new ticket in JIRA and checks out the git branch
+    jira new                # Creates a new ticket in JIRA
     jira rename             # Updates the summary of the input ticket
     jira sprint             # Lists sprint info
     jira tickets [jql]      # List the tickets of the input username (or jql)
@@ -38,7 +35,7 @@ Rubygems:
 
 Manually:
 
-    git clone git@github.com:darrenli/jira-cli.git
+    git clone git@github.com:ruby-jira/jira-cli.git
     cd jira-cli
     ./scripts/install
 
