@@ -2,7 +2,7 @@ module Jira
   class Watch < Thor
 
     desc 'delete', 'Stop watching the input ticket'
-    def delete(ticket=Jira::Core.ticket)
+    def delete(ticket)
       Command::Watch::Delete.new(ticket).run
     end
 

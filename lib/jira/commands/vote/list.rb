@@ -2,7 +2,7 @@ module Jira
   class Vote < Thor
 
     desc 'list', "List the votes on the input ticket"
-    def list(ticket=Jira::Core.ticket)
+    def list(ticket)
       Command::Vote::List.new(ticket).run
     end
 

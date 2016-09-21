@@ -1,9 +1,9 @@
 module Jira
   class CLI < Thor
 
-    desc "delete", "Deletes a ticket in JIRA and the git branch"
+    desc "delete <ticket>", "Deletes a ticket"
     method_option :force, type: :boolean, default: false
-    def delete(ticket=Jira::Core.ticket)
+    def delete(ticket)
       Command::Delete.new(ticket, options[:force]).run
     end
 
@@ -26,49 +26,11 @@ module Jira
         return if subtasks_failure?
 
         api.delete "issue/#{ticket}?deleteSubtasks=#{force}",
-          success: on_success,
-          failure: on_failure
+          success: ->{ puts "Ticket #{ticket} has been deleted." },
+          failure: ->{ puts "No change made to ticket #{ticket}." }
       end
 
     private
-
-      def on_success
-        -> do
-          on_failure and return unless create_branch?
-          on_failure and return unless delete_branch?
-        end
-      end
-
-      def on_failure
-        -> { puts "No change made to ticket #{ticket}." }
-      end
-
-      def branches
-        branches = `git branch --list 2> /dev/null`.split(' ')
-        branches.delete("*")
-        branches.delete(ticket.to_s)
-        branches
-      end
-
-      def create_branch?
-        response = io.yes?("Create branch?")
-
-        if branches.count == 1 or response
-          io.say("Creating a new branch.")
-          new_branch = io.ask("Branch?").strip
-          new_branch.delete!(" ")
-          on_failure and return false if new_branch.empty?
-          `git branch #{new_branch} 2> /dev/null`
-        end
-        true
-      end
-
-      def delete_branch?
-        response = self.io.select("Select a branch:", branches)
-        `git checkout #{response} 2> /dev/null`
-        `git branch -D #{ticket} 2> /dev/null`
-        true
-      end
 
       def subtasks_failure?
         return false unless subtask?

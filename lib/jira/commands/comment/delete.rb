@@ -2,7 +2,7 @@ module Jira
   class Comment < Thor
 
     desc 'delete', 'Delete a comment to the input ticket'
-    def delete(ticket=Jira::Core.ticket)
+    def delete(ticket)
       Command::Comment::Delete.new(ticket).run
     end
 

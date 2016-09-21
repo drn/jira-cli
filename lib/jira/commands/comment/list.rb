@@ -2,7 +2,7 @@ module Jira
   class Comment < Thor
 
     desc 'list', 'Lists the comments of the input ticket'
-    def list(ticket=Jira::Core.ticket)
+    def list(ticket)
       Command::Comment::List.new(ticket).run
     end
 

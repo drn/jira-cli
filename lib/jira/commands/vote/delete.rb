@@ -2,7 +2,7 @@ module Jira
   class Vote < Thor
 
     desc 'delete', 'Delete vote for the input ticket'
-    def delete(ticket=Jira::Core.ticket)
+    def delete(ticket)
       Command::Vote::Delete.new(ticket).run
     end
 

@@ -2,7 +2,7 @@ module Jira
   class Comment < Thor
 
     desc 'update', 'Update a comment to the input ticket'
-    def update(ticket=Jira::Core.ticket)
+    def update(ticket)
       Command::Comment::Update.new(ticket).run
     end
 
