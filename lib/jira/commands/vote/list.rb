@@ -42,7 +42,7 @@ module Jira
         end
 
         def no_voters?
-          if voters.count == 0
+          if voters.count.zero?
             puts "There are no votes on ticket #{ticket}."
             return true
           end

@@ -151,8 +151,9 @@ module Jira
 
       def description
         @description ||= (
-          description = options['description'] || (io.ask("Description:", default: '') if options['summary'].nil?)
-          description ||= ""
+          options['description'] ||
+            (io.ask("Description:", default: '') if options['summary'].nil?) ||
+            ""
         )
       end
 

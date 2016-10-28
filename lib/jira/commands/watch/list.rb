@@ -34,7 +34,7 @@ module Jira
         attr_accessor :watcher
 
         def no_watchers?
-          if watchers.count == 0
+          if watchers.count.zero?
             puts "Ticket #{ticket} has no watchers."
             return true
           end
