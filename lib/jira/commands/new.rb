@@ -50,9 +50,9 @@ module Jira
             issuetype:   { id: issue_type['id'] },
             summary:     summary,
             description: description,
-            parent:      @parent.nil? ? {} : { key: @parent },
-            components:  @components.nil? ? [] : @components
-          }
+            parent:      @parent.nil? ? nil : { key: @parent },
+            components:  @components.nil? ? nil : @components
+          }.delete_if{|_,v| v.nil? || v.eql?([])}
         }
       end
 
