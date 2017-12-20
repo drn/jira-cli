@@ -44,7 +44,7 @@ module Jira
       attr_accessor :ticket
 
       def params
-        parms = {
+        {
           fields: {
             project:     { id: project['id'] },
             issuetype:   { id: issue_type['id'] },
@@ -52,10 +52,8 @@ module Jira
             description: description,
             parent:      @parent.nil? ? nil : { key: @parent },
             components:  @components.nil? ? nil : @components
-          }
+          }.delete_if{|_,v| v.nil? || v.eql?([])}
         }
-        parms[:fields].delete_if{|k,v| v.nil? || v.eql?([])}
-        parms
       end
 
       def on_success
